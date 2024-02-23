@@ -7,23 +7,23 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                {% if logged %}
+                {% if session["logged"] %}
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item"><a class="nav-link" href = "#" data-bs-toggle = "modal" data-bs-target = "#openNotebookModal">Open notebook</a></li>
                         <li class="nav-item"><a class="nav-link" href = "#" data-bs-toggle = "modal" data-bs-target = "#createNotebookModal">Create Notebook</a></li>
                     </ul>
                 {% endif %}
 
-                {% if not logged %}
+                {% if not session["logged"] %}
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item"><a class="nav-link" href = "#" data-bs-toggle = "modal" data-bs-target = "#loginModal">Log In</a></li>
                     </ul>
                 {% endif %}
 
-                {% if logged %}
+                {% if session["logged"] %}
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><a class="nav-link" href="#">{{ profile_name }}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="javascript:void(0)">Log Out</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">{{ session['profile_name'] }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                     </ul>
                 {% endif%}
             </div>
@@ -58,8 +58,9 @@
                 <div class="modal-body">
                     <div class = "w-75 mb-3 mx-auto text-center provider-div" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                         <i class = "align-middle fa-brands fa-google" style = "color: black;"></i>
-                        <span class = "align-middle" style = "font-size: 14px;">Continue with Google</span>
+                        <a href="/login"><span class = "align-middle" style = "font-size: 14px;">Continue with Google</span></a>
                     </div>
+                    <!--
                     <div class = "w-75 mb-3 mx-auto text-center provider-div" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                         <i class = "align-middle fa-brands fa-github" style = "color: black; font-size: 18px;"></i>
                         <span class = "align-middle" style = "font-size: 14px;">Continue with Github</span>
@@ -68,6 +69,7 @@
                         <i class = "align-middle fa-brands fa-apple" style = "color: black; font-size: 18px;"></i>
                         <span class = "align-middle" style = "font-size: 14px;">Continue with Apple</span>
                     </div>
+                    -->
                 </div>
             </div>
         </div>
