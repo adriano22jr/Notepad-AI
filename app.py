@@ -28,6 +28,8 @@ def login_required(function):
 def index():
     return flask.render_template("index.html", client_id = app_config.GOOGLE_APP_SECRETS_FILE)
 
+
+"""
 @app.route("/login")
 def login():
     authorization_url, state = flow.authorization_url()
@@ -39,7 +41,7 @@ def logout():
     flask.session.clear()
     return flask.render_template("index.html")
 
-"""
+
 @app.route("/callback")
 def callback():
     flow.fetch_token(authorization_response = flask.request.url)
