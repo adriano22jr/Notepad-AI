@@ -23,7 +23,7 @@
                 {% if session["logged"] %}
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item"><a class="nav-link" href="#">{{ session['profile_name'] }}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/.auth/logout">Log Out</a></li>
                     </ul>
                 {% endif%}
             </div>
@@ -60,7 +60,7 @@
                 <div class="modal-body">
                     <div class = "w-75 mb-3 mx-auto text-center provider-div" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                         <i class = "align-middle fa-brands fa-google" style = "color: black;"></i>
-                        <a href="/login"><span class = "align-middle" style = "font-size: 14px;">Continue with Google</span></a>
+                        <a href="/.auth/login/google"><span class = "align-middle" style = "font-size: 14px;">Continue with Google</span></a>
                     </div>
                     <!--
                     <div class = "w-75 mb-3 mx-auto text-center provider-div" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
