@@ -27,7 +27,7 @@ def login_required(function):
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
-    return flask.render_template("index.html", client_id = app_config.GOOGLE_APP_SECRETS_FILE)
+    return flask.render_template("index.html", client_id = app_config.GOOGLE_CLIENT_SECRET)
 
 
 """
