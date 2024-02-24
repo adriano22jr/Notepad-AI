@@ -5,14 +5,17 @@ from pip._vendor import cachecontrol
 import google.auth.transport.requests
 
 app = flask.Flask(__name__, template_folder = "templateFiles", static_folder = "staticFiles")
-app.secret_key = 'notepadai'
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+#app.secret_key = 'notepadai'
+#os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 client_id = os.environ["GOOGLE_CLIENT_ID"]
 client_config = os.environ["GOOGLE_PROVIDER_AUTHENTICATION_SECRET"]
 
+"""
 flow = Flow.from_client_config(client_config = client_config, 
                                scopes = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
                                redirect_uri = "https://notepad-ai.azurewebsites.net/callback")
+"""
 
 def login_required(function):
     def wrapper(*args, **kwargs):
@@ -25,19 +28,21 @@ def login_required(function):
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
-    return flask.render_template("index.html")
+    return flask.render_template("index.html", client_id = client_id, client_secret = client_config)
 
 @app.route("/login")
 def login():
-    authorization_url, state = flow.authorization_url()
-    flask.session["state"] = state
-    return flask.redirect(authorization_url)
+    #authorization_url, state = flow.authorization_url()
+    #flask.session["state"] = state
+    #return flask.redirect(authorization_url)
+    return flask.render_template("index.html")
 
 @app.route("/logout")
 def logout():
     flask.session.clear()
     return flask.render_template("index.html")
 
+"""
 @app.route("/callback")
 def callback():
     flow.fetch_token(authorization_response = flask.request.url)
@@ -60,7 +65,7 @@ def callback():
     flask.session["profile_name"] = id_info.get("name")
     flask.session["logged"] = True
     return flask.render_template("index.html")
-
+"""
 
 @app.route("/notebook-regular", methods = ["GET", "POST"])
 @login_required
@@ -68,8 +73,11 @@ def notebook_regular():
     return flask.render_template("notebook_regular.html")
 
 @app.route("/notebook-markdown", methods = ["GET", "POST"])
+@login_required
 def notebook_markdown():
     return flask.render_template("notebook_markdown.html")
+
+
 
 if __name__ == "__main__":
     app.run(port = 8080, debug=True)
