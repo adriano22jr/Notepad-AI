@@ -10,10 +10,11 @@ app.secret_key = app_config.APP_SECRET_KEY
 client_id = app_config.GOOGLE_CLIENT_ID
 client_config = app_config.GOOGLE_CLIENT_SECRET
 
-
+"""
 flow = Flow.from_client_config(client_config = app_config.GOOGLE_APP_SECRETS_FILE, 
                                scopes = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
                                redirect_uri = "https://notepad-ai.azurewebsites.net/callback")
+"""
 
 def login_required(function):
     def wrapper(*args, **kwargs):
