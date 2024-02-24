@@ -1,4 +1,4 @@
-import flask, os, requests
+import flask, requests, app_config
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
 from pip._vendor import cachecontrol
@@ -6,16 +6,14 @@ import google.auth.transport.requests
 
 app = flask.Flask(__name__, template_folder = "templateFiles", static_folder = "staticFiles")
 
-#app.secret_key = 'notepadai'
-#os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-client_id = os.environ["GOOGLE_CLIENT_ID"]
-client_config = os.environ["GOOGLE_PROVIDER_AUTHENTICATION_SECRET"]
+app.secret_key = app_config.APP_SECRET_KEY
+client_id = app_config.GOOGLE_CLIENT_ID
+client_config = app_config.GOOGLE_CLIENT_SECRET
 
-"""
-flow = Flow.from_client_config(client_config = client_config, 
+
+flow = Flow.from_client_config(client_config = app_config.GOOGLE_APP_SECRETS_FILE, 
                                scopes = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
                                redirect_uri = "https://notepad-ai.azurewebsites.net/callback")
-"""
 
 def login_required(function):
     def wrapper(*args, **kwargs):
@@ -28,14 +26,13 @@ def login_required(function):
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
-    return flask.render_template("index.html", client_id = client_id, client_secret = client_config)
+    return flask.render_template("index.html", client_id = app_config.GOOGLE_APP_SECRETS_FILE)
 
 @app.route("/login")
 def login():
-    #authorization_url, state = flow.authorization_url()
-    #flask.session["state"] = state
-    #return flask.redirect(authorization_url)
-    return flask.render_template("index.html")
+    authorization_url, state = flow.authorization_url()
+    flask.session["state"] = state
+    return flask.redirect(authorization_url)
 
 @app.route("/logout")
 def logout():
