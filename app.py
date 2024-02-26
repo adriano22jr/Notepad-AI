@@ -1,20 +1,10 @@
 import flask, requests, app_config
-from google_auth_oauthlib.flow import Flow
-from google.oauth2 import id_token
-from pip._vendor import cachecontrol
-import google.auth.transport.requests
 
 app = flask.Flask(__name__, template_folder = "templateFiles", static_folder = "staticFiles")
 
 app.secret_key = app_config.APP_SECRET_KEY
 client_id = app_config.GOOGLE_CLIENT_ID
 client_config = app_config.GOOGLE_CLIENT_SECRET
-
-
-flow = Flow.from_client_config(client_config = app_config.GOOGLE_APP_SECRETS_FILE, 
-                               scopes = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-                               redirect_uri = "https://notepad-ai.azurewebsites.net/callback")
-
 
 def login_required(function):
     def wrapper(*args, **kwargs):
@@ -27,14 +17,7 @@ def login_required(function):
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
-    return flask.render_template("index.html", client_id = "app_config.GOOGLE_APP_SECRETS_FILE")
-
-
-@app.route("/login")
-def login():
-    authorization_url, state = flow.authorization_url()
-    flask.session["state"] = state
-    return flask.redirect(authorization_url)
+    return flask.render_template("index.html")
 
 @app.route("/logout")
 def logout():
@@ -44,37 +27,16 @@ def logout():
 
 @app.route("/callback")
 def callback():
-    token = requests.header.get("X-MS-TOKEN-GOOGLE-ACCESS-TOKEN")
+    token = flask.request.headers.get("X-MS-TOKEN-GOOGLE-ACCESS-TOKEN")
 
     data = requests.get(
-        "https://graph.microsoft.com/oidc/userinfo",
+        "https://openidconnect.googleapis.com/v1/userinfo",
         headers={ 'Authorization': f"Bearer {token}" },
     ).json()
     
-    
-    """
-        flow.fetch_token(authorization_response = flask.request.url)
-
-        if not flask.session["state"] == flask.request.args["state"]:
-            flask.abort(500)
-        
-        credentials = flow.credentials
-        request_session = requests.session()
-        cached_session = cachecontrol.CacheControl(request_session)
-        token_request = google.auth.transport.requests.Request(session = cached_session)
-        
-        id_info = id_token.verify_oauth2_token(
-            id_token = credentials.id_token,
-            request = token_request,
-            audience = client_id
-        )
-        
-        flask.session["google_id"] = id_info.get("sub")
-        flask.session["profile_name"] = id_info.get("name")
-        flask.session["logged"] = True
-    """
     flask.session["logged"] = True
-    return flask.render_template("index.html", client_id = token)
+    flask.session["profile_name"] = data["name"]
+    return flask.render_template("index.html")
 
 
 @app.route("/notebook-regular", methods = ["GET", "POST"])
