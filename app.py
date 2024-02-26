@@ -10,11 +10,11 @@ app.secret_key = app_config.APP_SECRET_KEY
 client_id = app_config.GOOGLE_CLIENT_ID
 client_config = app_config.GOOGLE_CLIENT_SECRET
 
-"""
+
 flow = Flow.from_client_config(client_config = app_config.GOOGLE_APP_SECRETS_FILE, 
                                scopes = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
                                redirect_uri = "https://notepad-ai.azurewebsites.net/callback")
-"""
+
 
 def login_required(function):
     def wrapper(*args, **kwargs):
@@ -27,10 +27,10 @@ def login_required(function):
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
-    return flask.render_template("index.html", client_id = app_config.GOOGLE_CLIENT_SECRET)
+    return flask.render_template("index.html", client_id = "non loggato")
 
 
-"""
+
 @app.route("/login")
 def login():
     authorization_url, state = flow.authorization_url()
@@ -45,35 +45,35 @@ def logout():
 
 @app.route("/callback")
 def callback():
-    flow.fetch_token(authorization_response = flask.request.url)
+    """
+        flow.fetch_token(authorization_response = flask.request.url)
 
-    if not flask.session["state"] == flask.request.args["state"]:
-        flask.abort(500)
-    
-    credentials = flow.credentials
-    request_session = requests.session()
-    cached_session = cachecontrol.CacheControl(request_session)
-    token_request = google.auth.transport.requests.Request(session = cached_session)
-    
-    id_info = id_token.verify_oauth2_token(
-        id_token = credentials.id_token,
-        request = token_request,
-        audience = client_id
-    )
-    
-    flask.session["google_id"] = id_info.get("sub")
-    flask.session["profile_name"] = id_info.get("name")
-    flask.session["logged"] = True
-    return flask.render_template("index.html")
-"""
+        if not flask.session["state"] == flask.request.args["state"]:
+            flask.abort(500)
+        
+        credentials = flow.credentials
+        request_session = requests.session()
+        cached_session = cachecontrol.CacheControl(request_session)
+        token_request = google.auth.transport.requests.Request(session = cached_session)
+        
+        id_info = id_token.verify_oauth2_token(
+            id_token = credentials.id_token,
+            request = token_request,
+            audience = client_id
+        )
+        
+        flask.session["google_id"] = id_info.get("sub")
+        flask.session["profile_name"] = id_info.get("name")
+        flask.session["logged"] = True
+    """
+    return flask.render_template("index.html", client_id = "login ok")
+
 
 @app.route("/notebook-regular", methods = ["GET", "POST"])
-@login_required
 def notebook_regular():
     return flask.render_template("notebook_regular.html")
 
 @app.route("/notebook-markdown", methods = ["GET", "POST"])
-@login_required
 def notebook_markdown():
     return flask.render_template("notebook_markdown.html")
 
