@@ -35,8 +35,8 @@ def callback():
     ).json()
     
     flask.session["logged"] = True
-    print(data)
-    return flask.render_template("index.html", client_id = data)
+    flask.session["profile_name"] = data["name"]
+    return flask.render_template("index.html")
 
 
 @app.route("/notebook-regular", methods = ["GET", "POST"])
