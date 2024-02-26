@@ -30,7 +30,6 @@ def index():
     return flask.render_template("index.html", client_id = "app_config.GOOGLE_APP_SECRETS_FILE")
 
 
-
 @app.route("/login")
 def login():
     authorization_url, state = flow.authorization_url()
@@ -45,6 +44,14 @@ def logout():
 
 @app.route("/callback")
 def callback():
+    token = flask.request.headers.get("X-MS-TOKEN-GOOGLE-ACCESS-TOKEN")
+
+    data = requests.get(
+        "https://graph.microsoft.com/oidc/userinfo",
+        headers={ 'Authorization': f"Bearer {token}" },
+    ).json()
+    
+    
     """
         flow.fetch_token(authorization_response = flask.request.url)
 
@@ -66,7 +73,8 @@ def callback():
         flask.session["profile_name"] = id_info.get("name")
         flask.session["logged"] = True
     """
-    return flask.render_template("index.html", client_id = "login ok")
+    flask.session["logged"] = True
+    return flask.render_template("index.html", client_id = data)
 
 
 @app.route("/notebook-regular", methods = ["GET", "POST"])
