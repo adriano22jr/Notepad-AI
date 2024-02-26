@@ -23,7 +23,7 @@
                 {% if session["logged"] %}
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item"><a class="nav-link" href="#">{{ session['profile_name'] }}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/.auth/logoutpost_logout_redirect_uri=/logout">Log Out</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/.auth/logout?post_logout_redirect_uri=/logout">Log Out</a></li>
                     </ul>
                 {% endif%}
             </div>

@@ -44,7 +44,7 @@ def logout():
 
 @app.route("/callback")
 def callback():
-    token = flask.request.headers.get("X-MS-TOKEN-GOOGLE-ACCESS-TOKEN")
+    token = requests.header.get("X-MS-TOKEN-GOOGLE-ACCESS-TOKEN")
 
     data = requests.get(
         "https://graph.microsoft.com/oidc/userinfo",
@@ -74,7 +74,7 @@ def callback():
         flask.session["logged"] = True
     """
     flask.session["logged"] = True
-    return flask.render_template("index.html", client_id = data)
+    return flask.render_template("index.html", client_id = token)
 
 
 @app.route("/notebook-regular", methods = ["GET", "POST"])
