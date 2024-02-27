@@ -9,6 +9,7 @@ def insert_user(firstname, lastname, email, username):
     connection = pyodbc.connect(CONNECTION_STRING)
     sql_command = f"INSERT INTO [dbo].[Users] (Email, FirstName, LastName, Username) VALUES ('{email}', '{firstname}', '{lastname}', '{username}');"
     connection.execute(sql_command)
+    connection.commit()
     connection.close()
     
 def check_exising_user(email):
@@ -21,9 +22,3 @@ def check_exising_user(email):
         return result[0]
     else:
         return None
-    
-"""
-if __name__ == "__main__":
-    res = check_exising_user("califanoadriano22@gmail.com")
-    print(res)
-"""
