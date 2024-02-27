@@ -35,12 +35,9 @@ def callback():
         headers={ 'Authorization': f"Bearer {token}" },
     ).json()
     
-    print(data["given_name"], data["family_name"], data["email"], data["name"])
-    print(str(data["given_name"]), str(data["family_name"]), str(data["email"]), str(data["name"]))
-    
     res = db_functions.check_exising_user(data["email"])
     if res is None:
-        db_functions.insert_user(data["given_name"], data["family_name"], data["email"], data["name"])
+        db_functions.insert_user(str(data["given_name"]), str(data["family_name"]), str(data["email"]), str(data["name"]))
     
     flask.session["logged"] = True
     flask.session["profile_name"] = data["name"]

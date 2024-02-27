@@ -21,3 +21,9 @@ def check_exising_user(email):
         return result[0]
     else:
         return None
+    
+"""
+if __name__ == "__main__":
+    res = check_exising_user("califanoadriano22@gmail.com")
+    print(res)
+"""
