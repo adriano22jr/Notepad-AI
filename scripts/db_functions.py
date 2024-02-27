@@ -3,7 +3,7 @@ import pyodbc, app_config
 SERVER = app_config.DB_NAME
 DATABASE = "notepadai-db"
 DRIVER = "{ODBC Driver 18 for SQL Server}"
-CONNECTION_STRING = f"DRIVER={DRIVER};SERVER={SERVER};DATABASE={DATABASE};ENCRYPT=yes;UID={app_config.DB_USERNAME};PWD={app_config.DB_PASSWORD};"
+CONNECTION_STRING = f"Driver={DRIVER};Server=tcp:{SERVER},1433;Database={DATABASE};Uid={app_config.DB_USERNAME};Pwd={app_config.DB_PASSWORD};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
 
 def insert_user(firstname, lastname, email, username):
     connection = pyodbc.connect(CONNECTION_STRING)
