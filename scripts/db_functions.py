@@ -7,7 +7,7 @@ CONNECTION_STRING = f"Driver={DRIVER};Server=tcp:{SERVER},1433;Database={DATABAS
 
 def insert_user(firstname, lastname, email, username):
     connection = pyodbc.connect(CONNECTION_STRING)
-    sql_command = f"INSERT INTO [dbo].[Users] (Email, FirstName, LastName, Username) VALUES ({email}, {firstname}, {lastname}, {username});"
+    sql_command = f"INSERT INTO [dbo].[Users] (Email, FirstName, LastName, Username) VALUES ('{email}', '{firstname}', '{lastname}', '{username}');"
     connection.execute(sql_command)
     connection.close()
     
