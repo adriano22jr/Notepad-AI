@@ -13,7 +13,7 @@ def insert_user(firstname, lastname, email, username):
     
 def check_exising_user(email):
     connection = pyodbc.connect(CONNECTION_STRING)
-    sql_command = f"SELECT * FROM [dbo].[Users] WHERE Email = {email}"
+    sql_command = f"SELECT * FROM [dbo].[Users] WHERE Email = '{email}'"
     
     cursor = connection.execute(sql_command)
     result = cursor.fetchall()
