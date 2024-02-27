@@ -1,4 +1,5 @@
 import flask, requests, app_config
+import scripts.db_functions as db_functions
 
 app = flask.Flask(__name__, template_folder = "templateFiles", static_folder = "staticFiles")
 
@@ -33,6 +34,10 @@ def callback():
         "https://openidconnect.googleapis.com/v1/userinfo",
         headers={ 'Authorization': f"Bearer {token}" },
     ).json()
+    
+    res = db_functions.check_exising_user(data["email"])
+    if res is None:
+        db_functions.insert_user(data["given_name"], data["family_name"], data["email"], data["name"])
     
     flask.session["logged"] = True
     flask.session["profile_name"] = data["name"]
