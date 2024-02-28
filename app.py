@@ -35,7 +35,7 @@ def callback():
         headers={ 'Authorization': f"Bearer {token}" },
     ).json()
     
-    res = db_functions.check_exising_user(str(data["email"]))
+    res = db_functions.check_exising_user(data["email"])
     if res is None:
         db_functions.insert_user(str(data["given_name"]), str(data["family_name"]), str(data["email"]), str(data["name"]))
     
