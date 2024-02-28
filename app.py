@@ -44,7 +44,7 @@ def delete_account():
     user = flask.session["session-user"]
     if email == user["Email"]:
         status_code = flask.Response(status = 200)
-    else: status_code = flask.Response(status = 200)
+    else: status_code = flask.Response(status = 400)
     return status_code
 
 
