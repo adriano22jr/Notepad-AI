@@ -43,10 +43,11 @@ def delete_account():
     email = flask.request.form.get("email")
     user = flask.session["session-user"]
     if email == user["Email"]:
+        db_functions.delete_user(email)
+        flask.session.clear()
         status_code = flask.Response(status = 200)
     else: status_code = flask.Response(status = 400)
     return status_code
-
 
 
 @app.route("/notebook-regular", methods = ["GET", "POST"])

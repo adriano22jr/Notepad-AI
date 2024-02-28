@@ -301,11 +301,9 @@
                         data: {"email": given_email},
                         statusCode: {
                             200: function(){
-                                alert("response 200");
                                 location.href="{{ url_for('index') }}";
                             },
                             400: function(){
-                                alert("response 400");
                                 $("#email-error-alert").css({"display": "block"});
                             }
                         }
