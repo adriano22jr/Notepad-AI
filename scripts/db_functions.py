@@ -22,7 +22,6 @@ def check_exising_user(email):
     
     cursor = connection.execute(sql_command)
     result = cursor.fetchall()
-    if len(result) == 1:
-        return result[0]
-    else:
-        return None
+    column_names = [column[0] for column in cursor.description]
+    if result: return dict(zip(column_names, result[0]))
+    else: return None

@@ -22,19 +22,12 @@ def check_exising_user(email):
     
     cursor = connection.execute(sql_command)
     result = cursor.fetchall()
-    if len(result) == 1:
-        return result[0]
-    else:
-        return None
+    column_names = [column[0] for column in cursor.description]
+    if result: return dict(zip(column_names, result[0]))
+    else: return None
     
     
     
 if __name__ == "__main__":
-    res = check_exising_user("califano993@gmail.com")
+    res = check_exising_user("califano99@gmail.com")
     print(res, type(res))
-    
-    delete_user("califano993@gmail.com")
-    res = check_exising_user("califano993@gmail.com")
-    print(res, type(res))
-    
-    insert_user("Mario", "Rossi", "m.rossi@unisa.it", "mrossi23")

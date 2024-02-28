@@ -7,14 +7,6 @@ app.secret_key = app_config.APP_SECRET_KEY
 client_id = app_config.GOOGLE_CLIENT_ID
 client_config = app_config.GOOGLE_CLIENT_SECRET
 
-def login_required(function):
-    def wrapper(*args, **kwargs):
-        if "google_id" not in flask.session:
-            return flask.abort(401)
-        else:
-            return function()
-    return wrapper
-
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
@@ -24,7 +16,6 @@ def index():
 def logout():
     flask.session.clear()
     return flask.render_template("index.html")
-
 
 @app.route("/callback")
 def callback():
@@ -38,10 +29,23 @@ def callback():
     res = db_functions.check_exising_user(str(data["email"]))
     if res is None:
         db_functions.insert_user(str(data["given_name"]), str(data["family_name"]), str(data["email"]), str(data["name"]))
-    
+        session_user = db_functions.check_exising_user(str(data["email"]))
+        flask.session["session-user"] = session_user
+    else:
+        flask.session["session-user"] = res
+        
     flask.session["logged"] = True
     flask.session["profile_name"] = data["name"]
-    return flask.render_template("index.html")
+    return flask.redirect(flask.url_for('index'))
+
+@app.route("/delete-account", methods = ["POST"])
+def delete_account():
+    email = flask.request.form.get("email")
+    if email == flask.session["session-user"]["email"]:
+        flask.response.status_code = 200
+    else: flask.response.status_code = 400
+    return flask.response
+
 
 
 @app.route("/notebook-regular", methods = ["GET", "POST"])
