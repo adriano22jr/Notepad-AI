@@ -22,7 +22,16 @@
 
                 {% if session["logged"] %}
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><a class="nav-link" href="#">{{ session['profile_name'] }}</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="profile-name" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ session['profile_name'] }}
+                            </a>
+                            <ul class = "dropdown-menu overflow-auto" aria-labelledby="profile-name">
+                                <li>
+                                    <a href="#" class="dropdown-item" data-bs-toggle = "modal" data-bs-target = "#deleteAccountModal">Delete Account</a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item"><a class="nav-link" href="/.auth/logout?post_logout_redirect_uri=/logout">Log Out</a></li>
                     </ul>
                 {% endif%}
@@ -251,6 +260,30 @@
                     </div>
                     <div class = "w-50 mx-auto text-center provider-div mb-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                         <span class = "align-middle" style = "font-size: 14px;">Create Notebook</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content"  style = "width: 600px;">
+                <div class="modal-header" style = "background-color: #0A2647;">
+                    <h5 class="modal-title" id="loginModalLabel" style = "font-size: 24px; color: white; opacity: 75%;">Delete Account?</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class = "justify-content">Deleting your account will permanently delete all your saved notebooks.</p>
+                    <p style = "font-size: 12px; margin-top: -15px;">This operation cannot be undone.</p>
+                    <div class = "d-flex">
+                        <div class = "mb-2"></div>
+                            <input type = "text" class = "form-control input-text" id = "email-delete" placeholder = "Insert here account email!">
+                            <div class = "w-50 text-center provider-div mb-2" id = "account-delete-button" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
+                                <span class = "align-middle" style = "font-size: 14px;">Delete Account</span>
+                            </div>
+                        </div>
+                        <p style = "font-size: 14px; margin-top: -7px; color: red; margin-left: 2px; display: none;">Wrong email address!</p>
                     </div>
                 </div>
             </div>

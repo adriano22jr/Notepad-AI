@@ -47,6 +47,13 @@ footer {
     cursor: pointer;
 }
 
+.input-text {
+    height: 26px;
+    width: 650px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
 input[type = "radio"]:checked {
     background-color: #0A2647;
     border: 1px solid #0A2647;
