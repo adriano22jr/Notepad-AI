@@ -1,6 +1,6 @@
-import pyodbc, app_config
+import pyodbc
 
-CONNECTION_STRING = f"Driver={app_config.DB_DRIVER_NAME};Server=tcp:{app_config.DB_SERVER_NAME},1433;Database={app_config.DB_NAME};Uid={app_config.DB_USERNAME};Pwd={app_config.DB_PASSWORD};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
+CONNECTION_STRING = "Driver={ODBC Driver 18 for SQL Server};Server=tcp:notepadai-dbserver.database.windows.net,1433;Database=notepadai-db;Uid=notepad-administrator;Pwd=Cloud2024;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
 
 def insert_user(firstname, lastname, email, username):
     connection = pyodbc.connect(CONNECTION_STRING)
@@ -26,3 +26,15 @@ def check_exising_user(email):
         return result[0]
     else:
         return None
+    
+    
+    
+if __name__ == "__main__":
+    res = check_exising_user("califano993@gmail.com")
+    print(res, type(res))
+    
+    delete_user("califano993@gmail.com")
+    res = check_exising_user("califano993@gmail.com")
+    print(res, type(res))
+    
+    insert_user("Mario", "Rossi", "m.rossi@unisa.it", "mrossi23")
