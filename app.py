@@ -41,7 +41,8 @@ def callback():
 @app.route("/delete-account", methods = ["POST"])
 def delete_account():
     email = flask.request.form.get("email")
-    if email == flask.session["session-user"]["email"]:
+    user = flask.session["session-user"]
+    if email == user["Email"]:
         flask.response.status_code = 200
     else: flask.response.status_code = 400
     return flask.response

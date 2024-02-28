@@ -29,5 +29,5 @@ def check_exising_user(email):
     
     
 if __name__ == "__main__":
-    res = check_exising_user("califano99@gmail.com")
+    res = check_exising_user("califano993@gmail.com")
     print(res, type(res))
