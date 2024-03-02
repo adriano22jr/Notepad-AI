@@ -10,11 +10,13 @@ client_config = app_config.GOOGLE_CLIENT_SECRET
 
 @app.route("/", methods = ["GET", "POST"])
 def index():
-    if flask.session["logged"] is not None:
-        session_user = flask.session["session-user"]
-        notebooks = db_functions.find_user_notebooks(session_user["UserID"])
-        return flask.render_template("index.html", notebooks = notebooks)
-    else:
+    try:
+        if flask.session["logged"] == True:
+            session_user = flask.session["session-user"]
+            notebooks = db_functions.find_user_notebooks(session_user["UserID"])
+            return flask.render_template("index.html", notebooks = notebooks)
+        else: flask.render_template("index.html")
+    except:
         return flask.render_template("index.html")
 
 @app.route("/logout")
