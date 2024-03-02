@@ -94,10 +94,10 @@
 
                 <div class="modal-body">
                     <div class="container">
-                        {% if {{notebooks}} is None%}
+                        {% if {{notebooks}} is None: %}
                             <h1>No notebooks found!</h1>
-                        {% else %}
-                            {% for item in range(0, len({{notebooks}}), 2)%}
+                        {% else: %}
+                            {% for item in range(0, len({{notebooks}}), 2): %}
                                 <div class="row">
                                     <div class="col-sm">
                                         <div class="card mb-2 mx-auto" style="width: 18rem;">
@@ -115,7 +115,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {% if i+1 is not None%}
+                                    {% if i+1 is not None: %}
                                         <div class="col-sm">
                                             <div class="card mb-2 mx-auto" style="width: 18rem;">
                                                 <img class="card-img-top" src = "{{url_for('static', filename = 'abstract-wave.jpg')}}" style = "height: 100px;">
