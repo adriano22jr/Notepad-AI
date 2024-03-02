@@ -104,12 +104,13 @@
                                             <img class="card-img-top" src = "{{url_for('static', filename = 'abstract-wave.jpg')}}" style = "height: 100px;">
                                             <div class="card-body text-center">
                                                 <span class="fw-bold" style = "font-size: 18px;">{{notebooks[i]["NotebookTitle"]}}</span>
+                                                <p style = "display: none" id = "notebook-id">{{notebooks[i]["NotebookID"]}}</p>
                                                 <div class = "row">
-                                                    <div class = "col-lg-2 w-75 mx-auto text-center provider-div" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
+                                                    <div class = "col-lg-2 w-75 mx-auto text-center provider-div" id = "open-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                                                         <span class = "align-middle" style = "font-size: 14px;">Open Notebook</span>
                                                     </div>
-                                                    <div class = "col-sm-2 text-center provider-div" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
-                                                        <span class = "align-middle" style = "font-size: 14px;"><i class="fa-solid fa-trash"></i></span>
+                                                    <div class = "col-sm-2 text-center provider-div" id = "delete-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
+                                                        <span class = "align-middle" style = "font-size: 14px;" ><i class="fa-solid fa-trash"></i></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -121,11 +122,12 @@
                                                 <img class="card-img-top" src = "{{url_for('static', filename = 'abstract-wave.jpg')}}" style = "height: 100px;">
                                                 <div class="card-body text-center">
                                                     <span class="fw-bold" style = "font-size: 18px;">{{notebooks[i+1]["NotebookTitle"]}}</span>
+                                                    <p style = "display: none" id = "notebook-id">{{notebooks[i]["NotebookID"]}}</p>
                                                     <div class = "row">
-                                                        <div class = "col-lg-2 w-75 mx-auto text-center provider-div" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
+                                                        <div class = "col-lg-2 w-75 mx-auto text-center provider-div" id = "open-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                                                             <span class = "align-middle" style = "font-size: 14px;">Open Notebook</span>
                                                         </div>
-                                                        <div class = "col-sm-2 text-center provider-div" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
+                                                        <div class = "col-sm-2 text-center provider-div" id = "delete-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                                                             <span class = "align-middle" style = "font-size: 14px;"><i class="fa-solid fa-trash"></i></span>
                                                         </div>
                                                     </div>
@@ -197,7 +199,7 @@
 
     {% block script %}
         <script>
-            function deleteAccount(){
+            $(document).ready(function(){
                 $("#account-delete-button").click(function(){
                     let given_email = $("#email-delete").val();
                     $.ajax({
@@ -214,7 +216,22 @@
                         }
                     });
                 })
-            }
+            });
+
+            $(document).ready(function(){
+                $("#delete-notebook").click(function(){
+                    let notebook_id = $("#notebook-id").val();
+                    $.ajax({
+                        type: "POST",
+                        url: "/delete-notebook",
+                        data: {"notebook_id": notebook_id}
+                    });
+                });
+            });
+
+            $(document).ready(function(){
+                $("")
+            });
         </script>
     {% endblock %}
 {% endblock %}

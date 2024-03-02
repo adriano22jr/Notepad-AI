@@ -1,5 +1,6 @@
 import flask, requests, app_config
 import scripts.db_functions as db_functions
+import scripts.container_operations as container_ops
 
 app = flask.Flask(__name__, template_folder = "templateFiles", static_folder = "staticFiles")
 
@@ -56,6 +57,14 @@ def delete_account():
     else: status_code = flask.Response(status = 400)
     return status_code
 
+@app.route("/delete-notebook", methods = ["POST"])
+def delete_notebook():
+    notebook_id = flask.request.form.get("notebook_id")
+    notebook = db_functions.get_notebook(notebook_id)
+    
+    db_functions.delete_notebook(notebook_id)
+    container_ops.delete_text_blob(notebook["StoredNotebookName"])
+    return flask.redirect(flask.url_for('index'))
 
 @app.route("/notebook-regular", methods = ["GET", "POST"])
 def notebook_regular():
