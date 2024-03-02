@@ -94,16 +94,16 @@
 
                 <div class="modal-body">
                     <div class="container">
-                        {% if not {{notebooks}} %}
+                        {% if not notebooks %}
                             <h1>No notebooks found!</h1>
                         {% else %}
-                            {% for item in range(0, len({{notebooks}}), 2) %}
+                            {% for i in range(0, lenght, 2) %}
                                 <div class="row">
                                     <div class="col-sm">
                                         <div class="card mb-2 mx-auto" style="width: 18rem;">
                                             <img class="card-img-top" src = "{{url_for('static', filename = 'abstract-wave.jpg')}}" style = "height: 100px;">
                                             <div class="card-body text-center">
-                                                <span class="fw-bold" style = "font-size: 18px;">{{item[i]["NotebookTitle"]}}</span>
+                                                <span class="fw-bold" style = "font-size: 18px;">{{notebooks[i]["NotebookTitle"]}}</span>
                                                 <div class = "row">
                                                     <div class = "col-lg-2 w-75 mx-auto text-center provider-div" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                                                         <span class = "align-middle" style = "font-size: 14px;">Open Notebook</span>
@@ -115,12 +115,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {% if not i+1 %}
+                                    {% if i+1 != lenght %}
                                         <div class="col-sm">
                                             <div class="card mb-2 mx-auto" style="width: 18rem;">
                                                 <img class="card-img-top" src = "{{url_for('static', filename = 'abstract-wave.jpg')}}" style = "height: 100px;">
                                                 <div class="card-body text-center">
-                                                    <span class="fw-bold" style = "font-size: 18px;">{{item[i+1]["NotebookTitle"]}}</span>
+                                                    <span class="fw-bold" style = "font-size: 18px;">{{notebooks[i+1]["NotebookTitle"]}}</span>
                                                     <div class = "row">
                                                         <div class = "col-lg-2 w-75 mx-auto text-center provider-div" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                                                             <span class = "align-middle" style = "font-size: 14px;">Open Notebook</span>
