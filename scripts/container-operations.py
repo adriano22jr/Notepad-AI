@@ -9,7 +9,7 @@ CONNECTION_STRING = f"DefaultEndpointsProtocol=https;AccountName={sa_name};Accou
 
 def upload_new_text_blob(filename, content):
     blob_service_client = az_blob.BlobServiceClient.from_connection_string(CONNECTION_STRING)
-    blob_client = blob_service_client.get_blob_client(container = "notebook-container", blob = filename)
+    blob_client = blob_service_client.get_blob_client(container = container_name, blob = filename)
     
     text_file = open(filename + ".txt", "w")
     text_file.write(content)
