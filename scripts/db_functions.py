@@ -25,3 +25,20 @@ def check_exising_user(email):
     column_names = [column[0] for column in cursor.description]
     if result: return dict(zip(column_names, result[0]))
     else: return None
+    
+def insert_notebook(title, userID, userEMAIL):
+    connection = pyodbc.connect(CONNECTION_STRING)
+    stored_name = f"{title}-{userEMAIL}"
+    sql_command = f"INSERT INTO [dbo].[Notebooks] (StoredNotebookName, NotebookTitle, UserID) VALUES ('{stored_name}', '{title}', {userID})"
+    connection.execute(sql_command)
+    connection.commit()
+    connection.close()
+    
+def find_user_notebooks(userID):
+    connection = pyodbc.connect(CONNECTION_STRING)
+    sql_command = f"SELECT * FROM [dbo].[Notebooks] WHERE UserID = '{userID}'"
+    cursor = connection.execute(sql_command)
+    
+    columns = [column[0] for column in cursor.description]
+    results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    return results
