@@ -41,9 +41,19 @@ def delete_notebook(id):
     connection.commit()
     connection.close()
     
-def get_notebook(id):
+def get_notebook_by_id(id):
     connection = pyodbc.connect(CONNECTION_STRING)
     sql_command = f"SELECT * FROM [dbo].[Notebooks] WHERE NotebookID = {id}"
+    cursor = connection.execute(sql_command)
+    
+    column_names = [column[0] for column in cursor.description]
+    result = cursor.fetchall()
+    if result: return dict(zip(column_names, result[0]))
+    else: return None
+
+def get_notebook_by_title(title):
+    connection = pyodbc.connect(CONNECTION_STRING)
+    sql_command = f"SELECT * FROM [dbo].[Notebooks] WHERE NotebookTitle = {title}"
     cursor = connection.execute(sql_command)
     
     column_names = [column[0] for column in cursor.description]

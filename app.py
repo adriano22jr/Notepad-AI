@@ -46,6 +46,14 @@ def callback():
     flask.session["profile_name"] = data["name"]
     return flask.redirect(flask.url_for('index'))
 
+@app.route("/notebook-regular", methods = ["GET", "POST"])
+def notebook_regular():
+    return flask.render_template("notebook_regular.html")
+
+@app.route("/notebook-markdown", methods = ["GET", "POST"])
+def notebook_markdown():
+    return flask.render_template("notebook_markdown.html")
+
 @app.route("/delete-account", methods = ["POST"])
 def delete_account():
     email = flask.request.form.get("email")
@@ -57,29 +65,38 @@ def delete_account():
     else: status_code = flask.Response(status = 400)
     return status_code
 
-@app.route("/delete-notebook", methods = ["POST"])
-def delete_notebook():
-    notebook_id = flask.request.form.get("notebook_id")
-    notebook = db_functions.get_notebook(notebook_id)
-    
-    db_functions.delete_notebook(notebook_id)
-    container_ops.delete_text_blob(notebook["StoredNotebookName"])
-    status_code = flask.Response(status = 200)
-    return status_code
-
 @app.route("/redirect-notebook", methods = ["POST"])
 def redirect_notebook():
     flask.session["notebook_name"] = flask.request.form.get("notebook_name")
     status_code = flask.Response(status = 200)
     return status_code
 
-@app.route("/notebook-regular", methods = ["GET", "POST"])
-def notebook_regular():
-    return flask.render_template("notebook_regular.html")
+@app.route("/save-notebook", methods = ["POST"])
+def save_notebook():
+    notebook_title = flask.request.form.get("notebook_title")
+    notebook_content = flask.request.form.get("notebook_content")
+    notebook_type = flask.request.form.get("notebook_type")
+    user = flask.session["session-user"]
+    
+    notebook = db_functions.get_notebook_by_title(notebook_title)
+    if notebook is None:
+        db_functions.insert_notebook(notebook_title, user["UserID"], user["Email"], notebook_type)
+        container_ops.upload_new_text_blob(f"{notebook_title}-{user["Email"]}", notebook_content)
+    else:
+        container_ops.update_text_blob(notebook["StoredNotebookName"], notebook_content)
+    
+    status_code = flask.Response(status = 200)
+    return status_code
 
-@app.route("/notebook-markdown", methods = ["GET", "POST"])
-def notebook_markdown():
-    return flask.render_template("notebook_markdown.html")
+@app.route("/delete-notebook", methods = ["POST"])
+def delete_notebook():
+    notebook_id = flask.request.form.get("notebook_id")
+    notebook = db_functions.get_notebook_by_id(notebook_id)
+    
+    db_functions.delete_notebook(notebook_id)
+    container_ops.delete_text_blob(notebook["StoredNotebookName"])
+    status_code = flask.Response(status = 200)
+    return status_code
 
 
 

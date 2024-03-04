@@ -29,10 +29,11 @@
             <button id = "confirm-button" class = "title-button align-top" style = "display: none;"><i class="fa-solid fa-circle-check"></i></button>
         </div>
         <div class = "d-inline float-end">
+            <button id = "savedb-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';" style = "display: none; width: 150px;">Upload changes</button>
             <button id = "edit-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Edit note</button>
             <button id = "confirm-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';" style = "display: none;">Save</button>
         </div>
-        <div id = "note-content" class = "notebook-content overflow-auto p-2" contenteditable = "false"></div>
+        <div id = "note-content" class = "notebook-content overflow-auto p-2" contenteditable = "false">{{ session["notebook_content"] }}</div>
 
         <div class = "d-flex justify-content-center">
             <div id = "toolbar" class = "w-50 text-center mt-1" style = "display: none;">
@@ -72,4 +73,25 @@
         </div>
         <a class = "footer-item px-2">© 2024 Notepad-AI, adriano22_</a>
     </footer>
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function(){
+            $("#savedb-button").click(function(){
+                let notebook_title = $("#note-title").text();
+                let notebook_content = $("#note-content").text();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/save-notebook",
+                    data: {"notebook_content": notebook_content, "notebook_title": notebook_title, "notebook_type": "regular"},
+                    statusCode: {
+                        200: function(){
+                            alert("Upload ok!");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

@@ -22,10 +22,10 @@ def upload_new_text_blob(filename, content):
     
 def delete_text_blob(filename):
     blob_service_client = az_blob.BlobServiceClient.from_connection_string(CONNECTION_STRING)
-    blob_client = blob_service_client.get_blob_client(container = "notebook-container", blob = filename)
+    blob_client = blob_service_client.get_blob_client(container = container_name, blob = filename)
     blob_client.delete_blob(delete_snapshots = "include")
     
 def update_text_blob(filename, content):
     blob_service_client = az_blob.BlobServiceClient.from_connection_string(CONNECTION_STRING)
-    blob_client = blob_service_client.get_blob_client(container = "notebook-container", blob = filename)
+    blob_client = blob_service_client.get_blob_client(container = container_name, blob = filename)
     blob_client.upload_blob(content, overwrite = True)

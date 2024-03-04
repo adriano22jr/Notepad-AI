@@ -29,6 +29,8 @@ $(document).ready(function(){
         
         $("#note-content").css({"border": "none"});
         $("#toolbar").css({"display": "none"});
+        
+        $("#savedb-button").css({"display": "inline-block"});
         $("#edit-content-button").css({"display": "inline-block"});
         $("#confirm-content-button").css({"display": "none"});
     });
