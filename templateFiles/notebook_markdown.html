@@ -24,8 +24,8 @@
 
     <div class = "p-2 text-center">
         <div class = "d-inline">
-            <button id = "edit-content-button" class = "content-button mt-2" onclick = "edit_content()" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Edit note</button>
-            <button id = "confirm-content-button" class = "content-button mt-2" onclick = "save_content()" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';" style = "display: none;">Save</button>
+            <button id = "edit-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Edit note</button>
+            <button id = "confirm-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';" style = "display: none;">Save</button>
             <button id = "confirm-content-button" class = "content-button mt-2" onclick = "preview()" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Preview</button>
         </div>
     </div>
@@ -48,26 +48,6 @@
 {% endblock %}
 {% block script %}
         <script>
-            function edit_content(){
-                content = document.getElementById("left-div");
-                edit_button = document.getElementById("edit-content-button");
-                save_button = document.getElementById("confirm-content-button");
-
-                edit_button.style.display = "none";
-                save_button.style.display = "inline-block"; 
-                content.contentEditable = "true";
-            }
-
-            function save_content(){
-                content = document.getElementById("left-div");
-                edit_button = document.getElementById("edit-content-button");
-                save_button = document.getElementById("confirm-content-button");
-
-                edit_button.style.display = "inline-block";
-                save_button.style.display = "none"; 
-                content.contentEditable = "false";
-            }
-
             function preview(){
                 preview_div = document.getElementById("right-div");
                 preview_div.style.visibility = "visible";

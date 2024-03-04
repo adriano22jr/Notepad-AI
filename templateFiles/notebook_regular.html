@@ -23,18 +23,16 @@
     </nav>
 
     <div class = "p-2">
-        <div id = "note-title" class = "notebook-title d-inline-block p-2" contenteditable = "false">Titolo notebook</div>
+        <div id = "note-title" class = "notebook-title d-inline-block p-2" contenteditable = "false">{{ session["notebook_name"] }}</div>
         <div class = "d-inline">
-            <button id = "edit-button" class = "title-button align-top" onclick = "edit_title()"><i class="fa-solid fa-pen"></i></button>
-            <button id = "confirm-button" class = "title-button align-top" onclick = "save_title()" style = "display: none;"><i class="fa-solid fa-circle-check"></i></button>
+            <button id = "edit-button" class = "title-button align-top"><i class="fa-solid fa-pen"></i></button>
+            <button id = "confirm-button" class = "title-button align-top" style = "display: none;"><i class="fa-solid fa-circle-check"></i></button>
         </div>
         <div class = "d-inline float-end">
-            <button id = "edit-content-button" class = "content-button mt-2" onclick = "edit_content()" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Edit note</button>
-            <button id = "confirm-content-button" class = "content-button mt-2" onclick = "save_content()" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';" style = "display: none;">Save</button>
+            <button id = "edit-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Edit note</button>
+            <button id = "confirm-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';" style = "display: none;">Save</button>
         </div>
-        <div id = "note-content" class = "notebook-content overflow-auto p-2" contenteditable = "false">
-            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus
-        </div>
+        <div id = "note-content" class = "notebook-content overflow-auto p-2" contenteditable = "false"></div>
 
         <div class = "d-flex justify-content-center">
             <div id = "toolbar" class = "w-50 text-center mt-1" style = "display: none;">
@@ -74,85 +72,4 @@
         </div>
         <a class = "footer-item px-2">© 2024 Notepad-AI, adriano22_</a>
     </footer>
-{% endblock %}
-
-{% block script %}
-        <script>          
-            function edit_title(){
-                title = document.getElementById("note-title");
-                edit_button = document.getElementById("edit-button");
-                save_button = document.getElementById("confirm-button");
-
-                edit_button.style.display = "none";
-                save_button.style.display = "inline-block"; 
-                title.contentEditable = "true";
-                title.style.border = "1px solid lightgray";
-            }
-
-            function save_title(){
-                title = document.getElementById("note-title");
-                edit_button = document.getElementById("edit-button");
-                save_button = document.getElementById("confirm-button");
-
-                edit_button.style.display = "inline-block";
-                save_button.style.display = "none"; 
-                title.contentEditable = "false";
-                title.style.border = "none";
-            }
-
-            function edit_content(){
-                content = document.getElementById("note-content");
-                tools = document.getElementById("toolbar");
-                edit_button = document.getElementById("edit-content-button");
-                save_button = document.getElementById("confirm-content-button");
-
-                edit_button.style.display = "none";
-                save_button.style.display = "inline-block"; 
-                tools.style.display = "block";
-                content.contentEditable = "true";
-                content.style.border = "1px solid lightgray";
-            }
-
-            function save_content(){
-                content = document.getElementById("note-content");
-                tools = document.getElementById("toolbar");
-                edit_button = document.getElementById("edit-content-button");
-                save_button = document.getElementById("confirm-content-button");
-
-                edit_button.style.display = "inline-block";
-                save_button.style.display = "none"; 
-                tools.style.display = "none";
-                content.contentEditable = "false";
-                content.style.border = "none";
-            }
-
-            function changeBackgroundColor(item) {
-                selectedText = window.getSelection().toString();
-                content  = document.getElementById("note-content");
-                
-                edited_text = content.innerHTML.replace(selectedText, `<span style="background-color: ${item.value}">${selectedText} </span>`);
-                content.innerHTML = edited_text;
-            }
-
-            function changeFontSize(item){
-                selectedText = window.getSelection().toString();
-                content  = document.getElementById("note-content");
-
-                edited_text = content.innerHTML.replace(selectedText, `<span style="font-size: ${item.value}">${selectedText} </span>`);
-                content.innerHTML = edited_text;
-            }
-
-            function changeFontStyle(item){
-                selectedText = window.getSelection().toString();
-                content  = document.getElementById("note-content");
-
-                if(item.value === "italic"){
-                    edited_text = content.innerHTML.replace(selectedText, `<span style="font-style: italic">${selectedText} </span>`);
-                } else {
-                    edited_text = content.innerHTML.replace(selectedText, `<span style="font-weight: bold">${selectedText} </span>`);
-                }
-
-                content.innerHTML = edited_text;
-            }
-        </script>
 {% endblock %}

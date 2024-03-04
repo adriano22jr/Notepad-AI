@@ -66,6 +66,15 @@ def delete_notebook():
     container_ops.delete_text_blob(notebook["StoredNotebookName"])
     return flask.redirect(flask.url_for('index'))
 
+@app.route("/redirect-notebook", methods = ["POST"])
+def redirect_notebook():
+    notebook_type = flask.request.form.get("notebook_type")
+    flask.session["notebook_name"] = flask.request.form.get("notebook_name")
+    
+    if notebook_type == "regular":
+        return flask.redirect(flask.url_for('notebook-regular'))
+    else: return flask.redirect(flask.url_for('notebook-markdown'))
+
 @app.route("/notebook-regular", methods = ["GET", "POST"])
 def notebook_regular():
     return flask.render_template("notebook_regular.html")

@@ -67,7 +67,7 @@
                 <div class="modal-body">
                     <div class = "w-75 mb-3 mx-auto text-center provider-div" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                         <i class = "align-middle fa-brands fa-google" style = "color: black;"></i>
-                        <a href="/.auth/login/google?post_login_redirect_uri=/callback"><span class = "align-middle" style = "font-size: 14px;">Continue with Google</span></a>
+                        <a href="/.auth/login/google?post_login_redirect_uri=/callback" style = "text-decoration: none; color: black;"><span class = "align-middle" style = "font-size: 14px;">Continue with Google</span></a>
                     </div>
                     <!--
                     <div class = "w-75 mb-3 mx-auto text-center provider-div" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
@@ -95,7 +95,7 @@
                 <div class="modal-body">
                     <div class="container">
                         {% if not notebooks %}
-                            <h1>No notebooks found!</h1>
+                            <h3 class = "text-center">No notebooks found!</h3>
                         {% else %}
                             {% for i in range(0, lenght, 2) %}
                                 <div class="row">
@@ -165,7 +165,7 @@
                             <label class="form-check-label" for="inlineRadio2">Markdown</label>
                         </div>
                     </div>
-                    <div class = "w-50 mx-auto text-center provider-div mb-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
+                    <div class = "w-50 mx-auto text-center provider-div mb-2" id = "create-notebook-button" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                         <span class = "align-middle" style = "font-size: 14px;">Create Notebook</span>
                     </div>
                 </div>
@@ -196,42 +196,4 @@
             </div>
         </div>
     </div>
-
-    {% block script %}
-        <script>
-            $(document).ready(function(){
-                $("#account-delete-button").click(function(){
-                    let given_email = $("#email-delete").val();
-                    $.ajax({
-                        type: "POST",
-                        url: "/delete-account",
-                        data: {"email": given_email},
-                        statusCode: {
-                            200: function(){
-                                location.href="{{ url_for('index') }}";
-                            },
-                            400: function(){
-                                $("#email-error-alert").css({"display": "block"});
-                            }
-                        }
-                    });
-                })
-            });
-
-            $(document).ready(function(){
-                $("#delete-notebook").click(function(){
-                    let notebook_id = $("#notebook-id").val();
-                    $.ajax({
-                        type: "POST",
-                        url: "/delete-notebook",
-                        data: {"notebook_id": notebook_id}
-                    });
-                });
-            });
-
-            $(document).ready(function(){
-                $("")
-            });
-        </script>
-    {% endblock %}
 {% endblock %}
