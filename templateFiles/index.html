@@ -236,29 +236,6 @@
                 });
             });
         });
-
-        /*
-        //Open notebook ajax function 
-        $(document).ready(function(){
-            $(".open-notebook").click(function(){
-                let notebook_id = $(this).parent().parent().find(".notebook-id").text();
-                let notebook_title = $(this).parent().parent().find(".notebook-title").text();
-                let notebook_type = $(this).parent().parent().find(".notebook-type").text();
-
-                $.ajax({
-                    type: "POST",
-                    url: "/open-notebook",
-                    data: {"notebook_id": notebook_id},
-                    statusCode: {
-                        200: function(data){
-                            if(notebook_type === "regular") location.href = "{{ url_for('notebook_regular', notebook_name = " + notebook_title + ", notebook_content = " + data["content"] + ") }}";
-                            else location.href = "{{ url_for('notebook_markdown', notebook_name = " + notebook_title + ", notebook_content = " + data["content"] + ") }}";
-                        }
-                    }
-                });
-            });
-        });
-        */
         
         //Go to new notebook function
         $(document).ready(function(){
