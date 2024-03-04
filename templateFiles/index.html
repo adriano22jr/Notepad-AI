@@ -250,11 +250,7 @@
         $(document).ready(function(){
             $(".open-notebook").click(function(){
                 let notebook_id = $(this).parent().parent().find(".notebook-id").text();
-                $.ajax({
-                    type: "POST",
-                    url: "/open-notebook",
-                    data: {"notebook_id": notebook_id}
-                });
+                location.href = "{{ url_for('open_notebook', id = 'PLACEHOLDER') }}".replace("PLACEHOLDER", notebook_id);
             });
         });
     </script>

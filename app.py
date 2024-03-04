@@ -100,10 +100,9 @@ def delete_notebook():
     status_code = flask.Response(status = 200)
     return status_code
 
-@app.route("/open-notebook", methods = ["POST"])
-def open_notebook():
-    notebook_id = flask.request.form.get("notebook_id")
-    notebook = db_functions.get_notebook_by_id(int(notebook_id))
+@app.route("/open-notebook/<id>", methods = ["POST"])
+def open_notebook(id):
+    notebook = db_functions.get_notebook_by_id(int(id))
     
     if notebook["NotebookType"] == "regular":
         return flask.redirect(flask.url_for('notebook_regular', name = notebook["NotebookTitle"]))
