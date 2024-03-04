@@ -243,8 +243,8 @@
                 let notebook_type = $(".form-check input:radio:checked").val();
                 let notebook_name = $("#notebookName").val();
 
-                if(notebook_type === "regular") location.href = "{{ url_for('notebook_regular', name = " + notebook_name + ") }}";
-                else location.href = "{{ url_for('notebook_markdown', name = " + notebook_name + ") }}";
+                if(notebook_type === "regular") location.href = "{{ url_for('notebook_regular', name = 'PLACEHOLDER') }}".replace("PLACEHOLDER", notebook_name);
+                else location.href = "{{ url_for('notebook_markdown', name = 'PLACEHOLDER') }}".replace("PLACEHOLDER", notebook_name);
             });
         });
     </script>
