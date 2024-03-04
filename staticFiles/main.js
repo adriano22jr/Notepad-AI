@@ -44,8 +44,8 @@ $(document).ready(function(){
             data: {"notebook_name": notebook_name},
             statusCode: {
                 200: function(){
-                    if(notebook_type === "regular") location.href="{{ url_for('notebook-regular') }}";
-                    else location.href="{{ url_for('notebook-markdown') }}";
+                    if(notebook_type === "regular") location.href = "{{ url_for('notebook_regular') }}";
+                    else location.href = "{{ url_for('notebook_markdown') }}";
                 }
             }
         });
