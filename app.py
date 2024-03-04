@@ -100,7 +100,7 @@ def delete_notebook():
     status_code = flask.Response(status = 200)
     return status_code
 
-@app.route("/open-notebook/<id>", methods = ["POST"])
+@app.route("/open-notebook/<id>", methods = ["GET", "POST"])
 def open_notebook(id):
     notebook = db_functions.get_notebook_by_id(int(id))
     
