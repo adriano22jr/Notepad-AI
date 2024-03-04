@@ -64,16 +64,14 @@ def delete_notebook():
     
     db_functions.delete_notebook(notebook_id)
     container_ops.delete_text_blob(notebook["StoredNotebookName"])
-    return flask.redirect(flask.url_for('index'))
+    status_code = flask.Response(status = 200)
+    return status_code
 
 @app.route("/redirect-notebook", methods = ["POST"])
 def redirect_notebook():
-    notebook_type = flask.request.form.get("notebook_type")
     flask.session["notebook_name"] = flask.request.form.get("notebook_name")
-    
-    if notebook_type == "regular":
-        return flask.redirect(flask.url_for('notebook_regular'))
-    else: return flask.redirect(flask.url_for('notebook_markdown'))
+    status_code = flask.Response(status = 200)
+    return status_code
 
 @app.route("/notebook-regular", methods = ["GET", "POST"])
 def notebook_regular():

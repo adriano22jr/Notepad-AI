@@ -23,7 +23,12 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: "/delete-notebook",
-            data: {"notebook_id": notebook_id}
+            data: {"notebook_id": notebook_id},
+            statusCode: {
+                200: function(){
+                    location.href="{{ url_for('index') }}";
+                }
+            }
         });
     });
 });
@@ -36,7 +41,13 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: "/redirect-notebook",
-            data: {"notebook_type": notebook_type, "notebook_name": notebook_name}
+            data: {"notebook_name": notebook_name},
+            statusCode: {
+                200: function(){
+                    if(notebook_type === "regular") location.href="{{ url_for('notebook_regular') }}";
+                    else location.href="{{ url_for('notebook_markdown') }}";
+                }
+            }
         });
     });
 });
