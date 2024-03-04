@@ -102,13 +102,14 @@
                                         <div class="card mb-2 mx-auto" style="width: 18rem;">
                                             <img class="card-img-top" src = "{{url_for('static', filename = 'abstract-wave.jpg')}}" style = "height: 100px;">
                                             <div class="card-body text-center">
-                                                <span class="fw-bold" style = "font-size: 18px;">{{notebooks[i]["NotebookTitle"]}}</span>
-                                                <p style = "display: none" id = "notebook-id">{{notebooks[i]["NotebookID"]}}</p>
+                                                <span class="fw-bold notebook-title" style = "font-size: 18px;">{{notebooks[i]["NotebookTitle"]}}</span>
+                                                <p style = "display: none" class = "notebook-id">{{notebooks[i]["NotebookID"]}}</p>
+                                                <p style = "display: none" class = "notebook-type">{{notebooks[i]["NotebookType"]}}</p>
                                                 <div class = "row">
-                                                    <div class = "col-lg-2 w-75 mx-auto text-center provider-div" id = "open-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
+                                                    <div class = "col-lg-2 w-75 mx-auto text-center provider-div open-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                                                         <span class = "align-middle" style = "font-size: 14px;">Open Notebook</span>
                                                     </div>
-                                                    <div class = "col-sm-2 text-center provider-div" id = "delete-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
+                                                    <div class = "col-sm-2 text-center provider-div delete-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                                                         <span class = "align-middle" style = "font-size: 14px;" ><i class="fa-solid fa-trash"></i></span>
                                                     </div>
                                                 </div>
@@ -120,13 +121,14 @@
                                             <div class="card mb-2 mx-auto" style="width: 18rem;">
                                                 <img class="card-img-top" src = "{{url_for('static', filename = 'abstract-wave.jpg')}}" style = "height: 100px;">
                                                 <div class="card-body text-center">
-                                                    <span class="fw-bold" style = "font-size: 18px;">{{notebooks[i+1]["NotebookTitle"]}}</span>
-                                                    <p style = "display: none" id = "notebook-id">{{notebooks[i]["NotebookID"]}}</p>
+                                                    <span class="fw-bold notebook-title" style = "font-size: 18px;">{{notebooks[i+1]["NotebookTitle"]}}</span>
+                                                    <p style = "display: none" class = "notebook-id">{{notebooks[i+1]["NotebookID"]}}</p>
+                                                    <p style = "display: none" class = "notebook-type">{{notebooks[i+1]["NotebookType"]}}</p>
                                                     <div class = "row">
-                                                        <div class = "col-lg-2 w-75 mx-auto text-center provider-div" id = "open-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
+                                                        <div class = "col-lg-2 w-75 mx-auto text-center provider-div open-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                                                             <span class = "align-middle" style = "font-size: 14px;">Open Notebook</span>
                                                         </div>
-                                                        <div class = "col-sm-2 text-center provider-div" id = "delete-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
+                                                        <div class = "col-sm-2 text-center provider-div delete-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                                                             <span class = "align-middle" style = "font-size: 14px;"><i class="fa-solid fa-trash"></i></span>
                                                         </div>
                                                     </div>
@@ -208,7 +210,7 @@
                     data: {"email": given_email},
                     statusCode: {
                         200: function(){
-                            location.href="/";
+                            location.href="{{ url_for('index') }}";
                         },
                         400: function(){
                             $("#email-error-alert").css({"display": "block"});
@@ -220,8 +222,8 @@
         
         //Delete notebook ajax function 
         $(document).ready(function(){
-            $("#delete-notebook").click(function(){
-                let notebook_id = $("#notebook-id").val();
+            $(".delete-notebook").click(function(){
+                let notebook_id = $(this).parent().parent().find(".notebook-id").text();
                 $.ajax({
                     type: "POST",
                     url: "/delete-notebook",
@@ -234,24 +236,36 @@
                 });
             });
         });
+
+        //Open notebook ajax function 
+        $(document).ready(function(){
+            $(".open-notebook").click(function(){
+                let notebook_id = $(this).parent().parent().find(".notebook-id").text();
+                let notebook_title = $(this).parent().parent().find(".notebook-title").text();
+                let notebook_type = $(this).parent().parent().find(".notebook-type").text();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/open-notebook",
+                    data: {"notebook_id": notebook_id},
+                    statusCode: {
+                        200: function(data){
+                            if(notebook_type === "regular") location.href = "{{ url_for('notebook_regular', notebook_name = " + notebook_title + ", notebook_content = " + data["content"] + ") }}";
+                            else location.href = "{{ url_for('notebook_markdown', notebook_name = " + notebook_title + ", notebook_content = " + data["content"] + ") }}";
+                        }
+                    }
+                });
+            });
+        });
         
-        //Go to new notebook ajax function
+        //Go to new notebook function
         $(document).ready(function(){
             $("#create-notebook-button").click(function(){
                 let notebook_type = $(".form-check input:radio:checked").val();
                 let notebook_name = $("#notebookName").val();
-        
-                $.ajax({
-                    type: "POST",
-                    url: "/redirect-notebook",
-                    data: {"notebook_name": notebook_name},
-                    statusCode: {
-                        200: function(){
-                            if(notebook_type === "regular") location.href = "{{ url_for('notebook_regular') }}";
-                            else location.href = "{{ url_for('notebook_markdown') }}";
-                        }
-                    }
-                });
+
+                if(notebook_type === "regular") location.href = "{{ url_for('notebook_regular', notebook_name = " + notebook_name + ") }}";
+                else location.href = "{{ url_for('notebook_markdown', notebook_name = " + notebook_name + ") }}";
             });
         });
     </script>

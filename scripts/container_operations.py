@@ -29,3 +29,12 @@ def update_text_blob(filename, content):
     blob_service_client = az_blob.BlobServiceClient.from_connection_string(CONNECTION_STRING)
     blob_client = blob_service_client.get_blob_client(container = container_name, blob = filename)
     blob_client.upload_blob(content, overwrite = True)
+    
+def get_blob_content(filename):
+    blob_service_client = az_blob.BlobServiceClient.from_connection_string(CONNECTION_STRING)
+    blob_client = blob_service_client.get_blob_client(container = container_name, blob = filename)
+    stream = blob_client.download_blob()
+    return stream.readall().decode("utf-8")
+    
+if __name__ == "__main__":
+    get_blob_content("Fondamenti di DataScience & Machine Learning-califanoadriano22@gmail.com")

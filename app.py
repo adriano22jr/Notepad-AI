@@ -46,13 +46,13 @@ def callback():
     flask.session["profile_name"] = data["name"]
     return flask.redirect(flask.url_for('index'))
 
-@app.route("/notebook-regular", methods = ["GET", "POST"])
-def notebook_regular():
-    return flask.render_template("notebook_regular.html")
+@app.route("/notebook-regular/<name>", methods = ["GET", "POST"])
+def notebook_regular(name):
+    return flask.render_template("notebook_regular.html", notebook_name = name, notebook_content = "")
 
-@app.route("/notebook-markdown", methods = ["GET", "POST"])
-def notebook_markdown():
-    return flask.render_template("notebook_markdown.html")
+@app.route("/notebook-markdown/<name>", methods = ["GET", "POST"])
+def notebook_markdown(name):
+    return flask.render_template("notebook_markdown.html", notebook_name = name, notebook_content = "")
 
 @app.route("/delete-account", methods = ["POST"])
 def delete_account():
@@ -63,12 +63,6 @@ def delete_account():
         flask.session.clear()
         status_code = flask.Response(status = 200)
     else: status_code = flask.Response(status = 400)
-    return status_code
-
-@app.route("/redirect-notebook", methods = ["POST"])
-def redirect_notebook():
-    flask.session["notebook_name"] = flask.request.form.get("notebook_name")
-    status_code = flask.Response(status = 200)
     return status_code
 
 @app.route("/save-notebook", methods = ["POST"])
@@ -91,13 +85,20 @@ def save_notebook():
 @app.route("/delete-notebook", methods = ["POST"])
 def delete_notebook():
     notebook_id = flask.request.form.get("notebook_id")
-    notebook = db_functions.get_notebook_by_id(notebook_id)
+    notebook = db_functions.get_notebook_by_id(int(notebook_id))
     
     db_functions.delete_notebook(notebook_id)
     container_ops.delete_text_blob(notebook["StoredNotebookName"])
     status_code = flask.Response(status = 200)
     return status_code
 
+@app.route("/open-notebook", methods = ["POST"])
+def open_notebook():
+    notebook_id = flask.request.form.get("notebook_id")
+    notebook = db_functions.get_notebook_by_id(int(notebook_id))
+    content = container_ops.get_blob_content(notebook["StoredNotebookName"])
+    
+    return flask.jsonify({"content": content}), 200
 
 
 if __name__ == "__main__":
