@@ -72,8 +72,8 @@ def redirect_notebook():
     flask.session["notebook_name"] = flask.request.form.get("notebook_name")
     
     if notebook_type == "regular":
-        return flask.redirect(flask.url_for('notebook-regular'))
-    else: return flask.redirect(flask.url_for('notebook-markdown'))
+        return flask.redirect(flask.url_for('notebook_regular'))
+    else: return flask.redirect(flask.url_for('notebook_markdown'))
 
 @app.route("/notebook-regular", methods = ["GET", "POST"])
 def notebook_regular():
