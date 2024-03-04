@@ -48,10 +48,18 @@ def callback():
 
 @app.route("/notebook-regular/<name>", methods = ["GET", "POST"])
 def notebook_regular(name):
+    notebook = db_functions.get_notebook_by_title(name)
+    if notebook is not None:
+        content = container_ops.get_blob_content(notebook["StoredNotebookName"])
+        return flask.render_template("notebook_regular.html", notebook_name = name, notebook_content = content)
     return flask.render_template("notebook_regular.html", notebook_name = name, notebook_content = "")
 
 @app.route("/notebook-markdown/<name>", methods = ["GET", "POST"])
 def notebook_markdown(name):
+    notebook = db_functions.get_notebook_by_title(name)
+    if notebook is not None:
+        content = container_ops.get_blob_content(notebook["StoredNotebookName"])
+        return flask.render_template("notebook_markdown.html", notebook_name = name, notebook_content = content)
     return flask.render_template("notebook_markdown.html", notebook_name = name, notebook_content = "")
 
 @app.route("/delete-account", methods = ["POST"])
@@ -96,9 +104,10 @@ def delete_notebook():
 def open_notebook():
     notebook_id = flask.request.form.get("notebook_id")
     notebook = db_functions.get_notebook_by_id(int(notebook_id))
-    content = container_ops.get_blob_content(notebook["StoredNotebookName"])
     
-    return flask.jsonify({"content": content}), 200
+    if notebook["NotebookType"] == "regular":
+        return flask.redirect(flask.url_for('notebook_regular', name = notebook["NotebookTitle"]))
+    else: return flask.redirect(flask.url_for('notebook_markdown', name = notebook["NotebookTitle"]))
 
 
 if __name__ == "__main__":
