@@ -87,8 +87,8 @@
                         data: {"notebook_content": notebook_content},
                         statusCode: {
                             200: function(data){
-                                $("#right-div").text(data["content"]);
-                                $("#right-div").css({"visibility": "visibile"});
+                                $("#right-div").html(data["content"]);
+                                $("#right-div").css({"visibility": "visible"});
                             }
                         }
                     })
