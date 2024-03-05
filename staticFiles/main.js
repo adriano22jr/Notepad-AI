@@ -33,17 +33,17 @@ $(document).ready(function(){
         $("#confirm-content-button").css({"display": "none"});
     });
 
-    $("edit-markdown-content-button").click(function(){
+    $("#edit-markdown-content-button").click(function(){
         $("#left-div").attr("contentEditable", true);
 
         $("#edit-markdown-content-button").css({"display": "none"});
         $("#confirm-markdown-content-button").css({"display": "inline-block"});
     });
 
-    $("confirm-markdown-content-button").click(function(){
+    $("#confirm-markdown-content-button").click(function(){
         $("#left-div").attr("contentEditable", false);
 
-        $("savedb-markdown-button").css({"display": "inline-block"});
+        $("#savedb-markdown-button").css({"display": "inline-block"});
         $("#edit-markdown-content-button").css({"display": "inline-block"});
         $("#confirm-markdown-content-button").css({"display": "none"});
     });
