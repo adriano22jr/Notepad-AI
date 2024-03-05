@@ -77,8 +77,8 @@
             });
 
             $(document).ready(function(){
-                $("preview-markdown-content-button").click(function(){
-                    $("#right-div").css({"visibility": "hiddenclear"});
+                $("#preview-markdown-content-button").click(function(){
+                    $("#right-div").css({"visibility": "hidden"});
                     let notebook_content = $("#left-div").text();
 
                     $.ajax({
