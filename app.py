@@ -1,4 +1,4 @@
-import flask, requests, app_config
+import flask, requests, markdown, app_config
 import scripts.db_functions as db_functions
 import scripts.container_operations as container_ops
 
@@ -108,6 +108,11 @@ def open_notebook(id):
         return flask.redirect(flask.url_for('notebook_regular', name = notebook["NotebookTitle"]))
     else: return flask.redirect(flask.url_for('notebook_markdown', name = notebook["NotebookTitle"]))
 
+@app.route("/render-markdown", methods = ["POST"])
+def render_markdown():
+     notebook_content = flask.request.form.get("notebook_content")
+     markdown_content = markdown.markdown(notebook_content)
+     return flask.jsonify({"content": markdown_content}), 200
 
 if __name__ == "__main__":
     app.run(port = 8080, debug=True)

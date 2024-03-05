@@ -2,3 +2,4 @@ Flask==3.0.2
 requests==2.31.0  
 pyodbc==5.1.0
 azure-storage-blob==12.19.0
+markdown==3.5.2
