@@ -14,12 +14,14 @@
                         </a>
                         <ul class = "dropdown-menu overflow-auto" aria-labelledby="navbarDropdown">
                             {% if not notebooks %}
-                                <li><a class="dropdown-item" href="#">No notebooks found!</a></li>
+                                <li><a class="dropdown-item" href="#" style = "pointer-events: none; cursor: default;">No notebooks found!</a></li>
                             {% else %}
                                 {% for note in notebooks %}
                                     <li>
-                                        <a class="dropdown-item">{{ note["NotebookTitle"] }}</a>
-                                        <p class="dropdown-item-id" style = "display: none;">{{ note["NotebookID"] }}</p>
+                                        <form action = "/open-notebook" method = "POST">
+                                            <input type = "hidden" name = "notebook-id" value = "{{ note['NotebookID'] }}">
+                                            <button type = "submit" class="dropdown-item">{{ note["NotebookTitle"] }}</button>    
+                                        </form>
                                     </li>
                                 {% endfor %}
                             {% endif %}
@@ -84,6 +86,7 @@
 {% endblock %}
 {% block script %}
     <script>
+        //save notebook contents into db
         $(document).ready(function(){
             $("#savedb-button").click(function(){
                 let notebook_title = $("#note-title").text();
@@ -100,13 +103,6 @@
                         }
                     }
                 });
-            });
-        });
-
-        $(document).ready(function(){
-            $(".dropdown-item").click(function(){
-                let notebook_id = $(this).siblings(".dropdown-item-id").text();
-                location.href = "{{ url_for('open_notebook', id = 'PLACEHOLDER') }}".replace("PLACEHOLDER", notebook_id);
             });
         });
     </script>
