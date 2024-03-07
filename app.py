@@ -55,7 +55,7 @@ def notebook_regular(name):
         return flask.render_template("notebook_regular.html", notebook_name = name, notebook_content = content, notebooks = user_notebooks)
     return flask.render_template("notebook_regular.html", notebook_name = name, notebook_content = "", notebooks = user_notebooks)
 
-@app.route("/notebook-markdown/<name>", methods = ["GET", "POST"])
+@app.route("/notebook-markdown/<name>", methods = ["POST"])
 def notebook_markdown(name):
     notebook = db_functions.get_notebook_by_title(name)
     if notebook is not None:
@@ -78,6 +78,24 @@ def delete_account():
     else: status_code = flask.Response(status = 400)
     return status_code
 
+@app.route("/new", methods = ["POST"])
+def new_notebook():
+    notebook_name = flask.request.form["notebook-name"]
+    notebook_type = flask.request.form["inlineRadioOptions"]
+    
+    if notebook_type == "regular": return flask.redirect(flask.url_for('notebook_regular', name = notebook_name), code = 307)
+    elif notebook_type == "markdown": return flask.redirect(flask.url_for('notebook_markdown', name = notebook_name), code = 307)
+    else: return flask.Response(status = 404)
+    
+@app.route("/open-notebook", methods = ["POST"])
+def open_notebook():
+    notebook_id = flask.request.form["notebook-id"]
+    notebook = db_functions.get_notebook_by_id(int(notebook_id))
+    
+    if notebook["NotebookType"] == "regular":
+        return flask.redirect(flask.url_for('notebook_regular', name = notebook["NotebookTitle"]), code = 307)
+    else: return flask.redirect(flask.url_for('notebook_markdown', name = notebook["NotebookTitle"]), code = 307)
+    
 @app.route("/save-notebook", methods = ["POST"])
 def save_notebook():
     notebook_title = flask.request.form.get("notebook_title")
@@ -104,15 +122,6 @@ def delete_notebook():
     container_ops.delete_text_blob(notebook["StoredNotebookName"])
     status_code = flask.Response(status = 200)
     return status_code
-
-@app.route("/open-notebook", methods = ["POST"])
-def open_notebook():
-    notebook_id = flask.request.form["notebook-id"]
-    notebook = db_functions.get_notebook_by_id(int(notebook_id))
-    
-    if notebook["NotebookType"] == "regular":
-        return flask.redirect(flask.url_for('notebook_regular', name = notebook["NotebookTitle"]), code = 307)
-    else: return flask.redirect(flask.url_for('notebook_markdown', name = notebook["NotebookTitle"]), code = 307)
 
 @app.route("/render-markdown", methods = ["POST"])
 def render_markdown():

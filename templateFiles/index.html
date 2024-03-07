@@ -155,22 +155,24 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class = "mb-2 w-75"></div>
-                        <input type = "text" class = "form-control" id = "notebookName" placeholder = "Insert here a name for the notebook!">
-                    </div>
-                    <div class = "text-center mb-2">
-                        <div class = "form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="regular" checked>
-                            <label class="form-check-label" for="inlineRadio1">Regular</label>
+                    <form action = "/new" method = "POST">
+                        <div class = "mb-2 w-75"></div>
+                            <input type = "text" class = "form-control" name = "notebook-name" placeholder = "Insert here a name for the notebook!">
                         </div>
-                        <div class = "form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="markdown">
-                            <label class="form-check-label" for="inlineRadio2">Markdown</label>
+                        <div class = "text-center mb-2">
+                            <div class = "form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="regular" checked>
+                                <label class="form-check-label" for="inlineRadio1">Regular</label>
+                            </div>
+                            <div class = "form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="markdown">
+                                <label class="form-check-label" for="inlineRadio2">Markdown</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class = "w-50 mx-auto text-center provider-div mb-2" id = "create-notebook-button" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
-                        <span class = "align-middle" style = "font-size: 14px;">Create Notebook</span>
-                    </div>
+                        <div class = "w-50 mx-auto text-center provider-div mb-2" id = "create-notebook-button" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
+                            <span class = "align-middle" style = "font-size: 14px;">Create Notebook</span>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -239,18 +241,14 @@
             });
         });
         
-        //Go to new notebook function
+        //Go to new notebook form trigger
         $(document).ready(function(){
             $("#create-notebook-button").click(function(){
-                let notebook_type = $(".form-check input:radio:checked").val();
-                let notebook_name = $("#notebookName").val();
-
-                if(notebook_type === "regular") location.href = "{{ url_for('notebook_regular', name = 'PLACEHOLDER') }}".replace("PLACEHOLDER", notebook_name);
-                else location.href = "{{ url_for('notebook_markdown', name = 'PLACEHOLDER') }}".replace("PLACEHOLDER", notebook_name);
+                $(this).parent().submit();
             });
         });
 
-        //Open notebook ajax function 
+        //Open notebook form trigger 
         $(document).ready(function(){
             $(".open-notebook").click(function(){
                 $(this).parent().parent().submit();
