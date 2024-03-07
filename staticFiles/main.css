@@ -86,6 +86,7 @@ input[type = "text"]:focus {
     resize: none;
     text-align: justify;
     border-radius: 5px;
+    border: none;
 }
 
 .notebook-title:focus, .notebook-content:focus{

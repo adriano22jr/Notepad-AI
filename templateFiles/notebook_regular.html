@@ -13,8 +13,16 @@
                             Other Notebooks
                         </a>
                         <ul class = "dropdown-menu overflow-auto" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            {% if not notebooks %}
+                                <li><a class="dropdown-item" href="#">No notebooks found!</a></li>
+                            {% else %}
+                                {% for note in notebooks %}
+                                    <li>
+                                        <a class="dropdown-item">{{ note["NotebookTitle"] }}</a>
+                                        <p class="dropdown-item-id" style = "display: none;">{{ note["NotebookID"] }}</p>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
                         </ul>
                     </li>
                 </ul>
@@ -33,7 +41,7 @@
             <button id = "edit-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Edit note</button>
             <button id = "confirm-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';" style = "display: none;">Save</button>
         </div>
-        <div id = "note-content" class = "notebook-content overflow-auto p-2" contenteditable = "false">{{ notebook_content }}</div>
+        <textarea id = "note-content" class = "notebook-content overflow-auto p-2" readonly>{{ notebook_content }}</textarea>
 
         <div class = "d-flex justify-content-center">
             <div id = "toolbar" class = "w-50 text-center mt-1" style = "display: none;">
@@ -79,7 +87,7 @@
         $(document).ready(function(){
             $("#savedb-button").click(function(){
                 let notebook_title = $("#note-title").text();
-                let notebook_content = $("#note-content").text();
+                let notebook_content = $("#note-content").val();
 
                 $.ajax({
                     type: "POST",

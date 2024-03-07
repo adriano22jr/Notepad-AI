@@ -48,11 +48,12 @@ def callback():
 
 @app.route("/notebook-regular/<name>", methods = ["GET", "POST"])
 def notebook_regular(name):
+    user_notebooks = db_functions.find_user_notebooks(flask.session["session-user"]["UserID"])
     notebook = db_functions.get_notebook_by_title(name)
     if notebook is not None:
         content = container_ops.get_blob_content(notebook["StoredNotebookName"])
-        return flask.render_template("notebook_regular.html", notebook_name = name, notebook_content = content)
-    return flask.render_template("notebook_regular.html", notebook_name = name, notebook_content = "")
+        return flask.render_template("notebook_regular.html", notebook_name = name, notebook_content = content, notebooks = user_notebooks)
+    return flask.render_template("notebook_regular.html", notebook_name = name, notebook_content = "", notebooks = user_notebooks)
 
 @app.route("/notebook-markdown/<name>", methods = ["GET", "POST"])
 def notebook_markdown(name):

@@ -14,7 +14,7 @@ $(document).ready(function(){
     });
 
     $("#edit-content-button").click(function(){
-        $("#note-content").attr("contentEditable", true);
+        $("#note-content").attr("readonly", false);
         
         $("#note-content").css({"border": "1px solid lightgray"});
         $("#toolbar").css({"display": "block"});
@@ -23,7 +23,7 @@ $(document).ready(function(){
     });
 
     $("#confirm-content-button").click(function(){
-        $("#note-content").attr("contentEditable", false);
+        $("#note-content").attr("readonly", true);
         
         $("#note-content").css({"border": "none"});
         $("#toolbar").css({"display": "none"});
@@ -46,5 +46,10 @@ $(document).ready(function(){
         $("#savedb-markdown-button").css({"display": "inline-block"});
         $("#edit-markdown-content-button").css({"display": "inline-block"});
         $("#confirm-markdown-content-button").css({"display": "none"});
+    });
+
+    $(".dropdown-item").click(function(){
+        let notebook_id = $(this).siblings(".dropdown-item-id").text();
+        location.href = "{{ url_for('open_notebook', id = 'PLACEHOLDER') }}".replace("PLACEHOLDER", notebook_id);
     });
 });
