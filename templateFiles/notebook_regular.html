@@ -102,5 +102,12 @@
                 });
             });
         });
+
+        $(document).ready(function(){
+            $(".dropdown-item").click(function(){
+                let notebook_id = $(this).siblings(".dropdown-item-id").text();
+                location.href = "{{ url_for('open_notebook', id = 'PLACEHOLDER') }}".replace("PLACEHOLDER", notebook_id);
+            });
+        });
     </script>
 {% endblock %}

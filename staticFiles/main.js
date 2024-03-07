@@ -47,9 +47,4 @@ $(document).ready(function(){
         $("#edit-markdown-content-button").css({"display": "inline-block"});
         $("#confirm-markdown-content-button").css({"display": "none"});
     });
-
-    $(".dropdown-item").click(function(){
-        let notebook_id = $(this).siblings(".dropdown-item-id").text();
-        location.href = "{{ url_for('open_notebook', id = 'PLACEHOLDER') }}".replace("PLACEHOLDER", notebook_id);
-    });
 });
