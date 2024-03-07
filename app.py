@@ -46,7 +46,7 @@ def callback():
     flask.session["profile_name"] = data["name"]
     return flask.redirect(flask.url_for('index'))
 
-@app.route("/notebook-regular/<name>", methods = ["GET", "POST"])
+@app.route("/notebook-regular/<name>", methods = ["POST"])
 def notebook_regular(name):
     user_notebooks = db_functions.find_user_notebooks(flask.session["session-user"]["UserID"])
     notebook = db_functions.get_notebook_by_title(name)
@@ -68,6 +68,10 @@ def delete_account():
     email = flask.request.form.get("email")
     user = flask.session["session-user"]
     if email == user["Email"]:
+        notebooks = db_functions.find_user_notebooks(user["UserID"])
+        for note in notebooks:
+            container_ops.delete_text_blob(note["StoredNotebookName"])
+            
         db_functions.delete_user(email)
         flask.session.clear()
         status_code = flask.Response(status = 200)
@@ -101,13 +105,14 @@ def delete_notebook():
     status_code = flask.Response(status = 200)
     return status_code
 
-@app.route("/open-notebook/<id>", methods = ["GET", "POST"])
-def open_notebook(id):
-    notebook = db_functions.get_notebook_by_id(int(id))
+@app.route("/open-notebook", methods = ["POST"])
+def open_notebook():
+    notebook_id = flask.request.form["notebook-id"]
+    notebook = db_functions.get_notebook_by_id(int(notebook_id))
     
     if notebook["NotebookType"] == "regular":
-        return flask.redirect(flask.url_for('notebook_regular', name = notebook["NotebookTitle"]))
-    else: return flask.redirect(flask.url_for('notebook_markdown', name = notebook["NotebookTitle"]))
+        return flask.redirect(flask.url_for('notebook_regular', name = notebook["NotebookTitle"]), code = 307)
+    else: return flask.redirect(flask.url_for('notebook_markdown', name = notebook["NotebookTitle"]), code = 307)
 
 @app.route("/render-markdown", methods = ["POST"])
 def render_markdown():
