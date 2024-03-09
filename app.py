@@ -60,11 +60,12 @@ def notebook_regular(name):
 
 @app.route("/notebook-markdown/<name>", methods = ["POST"])
 def notebook_markdown(name):
+    user_notebooks = db_functions.find_user_notebooks(flask.session["session-user"]["UserID"])
     notebook = db_functions.get_notebook_by_title(name)
     if notebook is not None:
         content = container_ops.get_blob_content(notebook["StoredNotebookName"])
-        return flask.render_template("notebook_markdown.html", notebook_name = name, notebook_content = content)
-    return flask.render_template("notebook_markdown.html", notebook_name = name, notebook_content = "")
+        return flask.render_template("notebook_markdown.html", notebook_title = name, notebook_name = notebook["StoredNotebookName"], notebook_content = content, notebooks = user_notebooks)
+    return flask.render_template("notebook_markdown.html", notebook_title = name, notebook_name = "", notebook_content = "", notebooks = user_notebooks)
 
 @app.route("/delete-account", methods = ["POST"])
 def delete_account():
@@ -116,13 +117,16 @@ def save_notebook():
     notebook = db_functions.get_notebook_by_stored_name(notebook_name)
     if notebook is None:
         db_functions.insert_notebook(notebook_title, user["UserID"], user["Email"], notebook_type)
-        container_ops.upload_new_text_blob(f"{notebook_title}-{user["Email"]}", str(strings))
+        if notebook_type == "regular": container_ops.upload_new_text_blob(f"{notebook_title}-{user["Email"]}", str(strings))
+        else: container_ops.upload_new_text_blob(f"{notebook_title}-{user["Email"]}", notebook_content)
     else:
         if notebook_title == notebook["NotebookTitle"]:
-            container_ops.update_text_blob(notebook["StoredNotebookName"], str(strings))
+            if notebook_type == "regular": container_ops.update_text_blob(notebook["StoredNotebookName"], str(strings))
+            else: container_ops.update_text_blob(notebook["StoredNotebookName"], notebook_content)
         else:
             db_functions.update_notebook_title(notebook_title, notebook["NotebookID"])
-            container_ops.update_text_blob(notebook["StoredNotebookName"], str(strings))
+            if notebook_type == "regular": container_ops.update_text_blob(notebook["StoredNotebookName"], str(strings))
+            else: container_ops.update_text_blob(notebook["StoredNotebookName"], notebook_content)
             
     status_code = flask.Response(status = 200)
     return status_code

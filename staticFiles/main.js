@@ -34,14 +34,14 @@ $(document).ready(function(){
     });
 
     $("#edit-markdown-content-button").click(function(){
-        $("#left-div").attr("contentEditable", true);
+        $("#left-div").attr("readonly", false);
 
         $("#edit-markdown-content-button").css({"display": "none"});
         $("#confirm-markdown-content-button").css({"display": "inline-block"});
     });
 
     $("#confirm-markdown-content-button").click(function(){
-        $("#left-div").attr("contentEditable", false);
+        $("#left-div").attr("readonly", true);
 
         $("#savedb-markdown-button").css({"display": "inline-block"});
         $("#edit-markdown-content-button").css({"display": "inline-block"});
