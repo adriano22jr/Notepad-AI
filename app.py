@@ -116,13 +116,13 @@ def save_notebook():
     notebook = db_functions.get_notebook_by_stored_name(notebook_name)
     if notebook is None:
         db_functions.insert_notebook(notebook_title, user["UserID"], user["Email"], notebook_type)
-        container_ops.upload_new_text_blob(f"{notebook_title}-{user["Email"]}", strings)
+        container_ops.upload_new_text_blob(f"{notebook_title}-{user["Email"]}", str(strings))
     else:
         if notebook_title == notebook["NotebookTitle"]:
-            container_ops.update_text_blob(notebook["StoredNotebookName"], strings)
+            container_ops.update_text_blob(notebook["StoredNotebookName"], str(strings))
         else:
             db_functions.update_notebook_title(notebook_title, notebook["NotebookID"])
-            container_ops.update_text_blob(notebook["StoredNotebookName"], strings)
+            container_ops.update_text_blob(notebook["StoredNotebookName"], str(strings))
             
     status_code = flask.Response(status = 200)
     return status_code
