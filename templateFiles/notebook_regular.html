@@ -33,7 +33,8 @@
     </nav>
 
     <div class = "p-2">
-        <div id = "note-title" class = "notebook-title d-inline-block p-2" contenteditable = "false">{{ notebook_name }}</div>
+        <div id = "note-title" class = "notebook-title d-inline-block p-2" contenteditable = "false">{{ notebook_title }}</div>
+        <div id = "note-name" class = "notebook-title d-inline-block p-2" contenteditable = "false">{{ notebook_name }}</div>
         <div class = "d-inline">
             <button id = "edit-button" class = "title-button align-top"><i class="fa-solid fa-pen"></i></button>
             <button id = "confirm-button" class = "title-button align-top" style = "display: none;"><i class="fa-solid fa-circle-check"></i></button>
@@ -43,7 +44,7 @@
             <button id = "edit-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Edit note</button>
             <button id = "confirm-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';" style = "display: none;">Save</button>
         </div>
-        <textarea id = "note-content" class = "notebook-content overflow-auto p-2" readonly>{{ notebook_content }}</textarea>
+        <div id = "note-content" class = "notebook-content overflow-auto p-2" style = "white-space: pre-line;">{{ notebook_content | safe}}</div>
 
         <div class = "d-flex justify-content-center">
             <div id = "toolbar" class = "w-50 text-center mt-1" style = "display: none;">
@@ -90,12 +91,13 @@
         $(document).ready(function(){
             $("#savedb-button").click(function(){
                 let notebook_title = $("#note-title").text();
-                let notebook_content = $("#note-content").val();
+                let notebook_name = $("#note-name").text();
+                let notebook_content = $("#note-content").html();
 
                 $.ajax({
                     type: "POST",
                     url: "/save-notebook",
-                    data: {"notebook_content": notebook_content, "notebook_title": notebook_title, "notebook_type": "regular"},
+                    data: {"notebook_content": notebook_content, "notebook_title": notebook_title, "notebook_name": notebook_name, "notebook_type": "regular"},
                     statusCode: {
                         200: function(){
                             alert("Upload ok!");

@@ -51,9 +51,12 @@ def notebook_regular(name):
     user_notebooks = db_functions.find_user_notebooks(flask.session["session-user"]["UserID"])
     notebook = db_functions.get_notebook_by_title(name)
     if notebook is not None:
-        content = container_ops.get_blob_content(notebook["StoredNotebookName"])
-        return flask.render_template("notebook_regular.html", notebook_name = name, notebook_content = content, notebooks = user_notebooks)
-    return flask.render_template("notebook_regular.html", notebook_name = name, notebook_content = "", notebooks = user_notebooks)
+        stored_content = container_ops.get_blob_content(notebook["StoredNotebookName"])
+        content = ""
+        for elem in stored_content:
+            content += "<div>" + elem + "</div>"
+        return flask.render_template("notebook_regular.html", notebook_title = name, notebook_name = notebook["StoredNotebookName"], notebook_content = content, notebooks = user_notebooks)
+    return flask.render_template("notebook_regular.html", notebook_title = name, notebook_name = "", notebook_content = "", notebooks = user_notebooks)
 
 @app.route("/notebook-markdown/<name>", methods = ["POST"])
 def notebook_markdown(name):
@@ -99,17 +102,28 @@ def open_notebook():
 @app.route("/save-notebook", methods = ["POST"])
 def save_notebook():
     notebook_title = flask.request.form.get("notebook_title")
+    notebook_name = flask.request.form.get("notebook_name")
     notebook_content = flask.request.form.get("notebook_content")
     notebook_type = flask.request.form.get("notebook_type")
     user = flask.session["session-user"]
     
-    notebook = db_functions.get_notebook_by_title(notebook_title)
+    rows = notebook_content.split("<div>")
+    strings = []
+    for row in rows: 
+        elem = row.replace("</div>", "")
+        strings.append(elem)    
+    
+    notebook = db_functions.get_notebook_by_stored_name(notebook_name)
     if notebook is None:
         db_functions.insert_notebook(notebook_title, user["UserID"], user["Email"], notebook_type)
-        container_ops.upload_new_text_blob(f"{notebook_title}-{user["Email"]}", notebook_content)
+        container_ops.upload_new_text_blob(f"{notebook_title}-{user["Email"]}", strings)
     else:
-        container_ops.update_text_blob(notebook["StoredNotebookName"], notebook_content)
-    
+        if notebook_title == notebook["NotebookTitle"]:
+            container_ops.update_text_blob(notebook["StoredNotebookName"], strings)
+        else:
+            db_functions.update_notebook_title(notebook_title, notebook["NotebookID"])
+            container_ops.update_text_blob(notebook["StoredNotebookName"], strings)
+            
     status_code = flask.Response(status = 200)
     return status_code
 

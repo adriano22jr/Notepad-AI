@@ -14,7 +14,7 @@ $(document).ready(function(){
     });
 
     $("#edit-content-button").click(function(){
-        $("#note-content").attr("readonly", false);
+        $("#note-content").attr("contentEditable", true);
         
         $("#note-content").css({"border": "1px solid lightgray"});
         $("#toolbar").css({"display": "block"});
@@ -23,7 +23,7 @@ $(document).ready(function(){
     });
 
     $("#confirm-content-button").click(function(){
-        $("#note-content").attr("readonly", true);
+        $("#note-content").attr("contentEditable", false);
         
         $("#note-content").css({"border": "none"});
         $("#toolbar").css({"display": "none"});
