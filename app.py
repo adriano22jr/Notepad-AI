@@ -1,4 +1,4 @@
-import flask, requests, markdown, app_config
+import flask, requests, markdown, app_config, ast
 import scripts.db_functions as db_functions
 import scripts.container_operations as container_ops
 
@@ -51,7 +51,7 @@ def notebook_regular(name):
     user_notebooks = db_functions.find_user_notebooks(flask.session["session-user"]["UserID"])
     notebook = db_functions.get_notebook_by_title(name)
     if notebook is not None:
-        stored_content = container_ops.get_blob_content(notebook["StoredNotebookName"])
+        stored_content = ast.literal_eval(container_ops.get_blob_content(notebook["StoredNotebookName"]))
         content = ""
         for elem in stored_content:
             content += "<div>" + elem + "</div>"
