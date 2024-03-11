@@ -1,6 +1,7 @@
 $(document).ready(function(){
     $("#edit-button").click(function(){
         $("#note-title").attr("contentEditable", true);
+
         $("#note-title").css({"border": "1px solid lightgray"});
         $("#edit-button").css({"display": "none"});
         $("#confirm-button").css({"display": "inline-block"});
@@ -8,6 +9,10 @@ $(document).ready(function(){
 
     $("#confirm-button").click(function(){
         $("#note-title").attr("contentEditable", false);
+
+        $("#savedb-markdown-button").css({"display": "inline-block"});
+        $("#savedb-button").css({"display": "inline-block"});
+        
         $("#note-title").css({"border": "none"});
         $("#edit-button").css({"display": "inline-block"});
         $("#confirm-button").css({"display": "none"});

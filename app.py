@@ -98,7 +98,8 @@ def open_notebook():
     
     if notebook["NotebookType"] == "regular":
         return flask.redirect(flask.url_for('notebook_regular', name = notebook["NotebookTitle"]), code = 307)
-    else: return flask.redirect(flask.url_for('notebook_markdown', name = notebook["NotebookTitle"]), code = 307)
+    elif notebook["NotebookType"] == "markdown": return flask.redirect(flask.url_for('notebook_markdown', name = notebook["NotebookTitle"]), code = 307)
+    else: return flask.Response(status = 404)
     
 @app.route("/save-notebook", methods = ["POST"])
 def save_notebook():

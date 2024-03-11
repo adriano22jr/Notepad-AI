@@ -84,6 +84,33 @@
         </div>
         <a class = "footer-item px-2">© 2024 Notepad-AI, adriano22_</a>
     </footer>
+
+    <div class="modal fade" id="upload-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body border-0 text-center">
+                    <span style = "font-size: 32px; color: green">&#10004;</span>
+                    <p class = "justify-content" style = "font-size: 18px;">Your changes have been successfully saved!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="unsaved-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body border-0 text-center">
+                    <span class = "justify-content" style = "font-size: 18px;">&#9432; There are some unsaved changes!</span>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block script %}
     <script>
@@ -100,11 +127,28 @@
                     data: {"notebook_content": notebook_content, "notebook_title": notebook_title, "notebook_name": notebook_name, "notebook_type": "regular"},
                     statusCode: {
                         200: function(){
-                            alert("Upload ok!");
+                            $("#upload-modal").modal("show");
                             $("#savedb-button").css({"display": "none"});
                         }
                     }
                 });
+            });
+        });
+
+        //prevent redirect if there are unsaved changes!
+        $(document).ready(function(){
+            $(".navbar-brand").click(function(){
+                if($("#savedb-button").css("display") == "inline-block"){
+                    $("#unsaved-modal").modal("show");
+                    event.preventDefault();
+                }
+            });
+
+            $(".dropdown-item").click(function(){
+                if($("#savedb-button").css("display") == "inline-block"){
+                    $("#unsaved-modal").modal("show");
+                    event.preventDefault();
+                }
             });
         });
     </script>
