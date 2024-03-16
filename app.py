@@ -158,7 +158,7 @@ def summarize_text():
     text_language_detected = json.loads(json.dumps(text_translator_data, sort_keys=True, ensure_ascii=False, indent=4, separators=(',', ': ')))[0]["language"]
     
     if text_language_detected != "en":
-        translated_summarization = ai_services.translate_text(summarize_text, [text_language_detected])
+        translated_summarization = ai_services.translate_text(summarized_text, [text_language_detected])
         return flask.jsonify({"summarization": translated_summarization})
     else: return flask.jsonify({"summarization": summarized_text})
 
