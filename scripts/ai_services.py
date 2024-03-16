@@ -30,3 +30,12 @@ def translate_text(text, languages: list):
     
     request = requests.post(path, params = params, headers = headers, json = body)
     return request.json()
+
+def detect_language(text):
+    path = translator_endpoint + "detect"
+    params = {'api-version': '3.0'}
+    headers = {'Ocp-Apim-Subscription-Key': translator_key, 'Ocp-Apim-Subscription-Region': translator_location, 'Content-type': 'application/json', 'X-ClientTraceId': str(uuid.uuid4())}
+    body = [{'text': text}]
+    
+    request = requests.post(path, params = params, headers = headers, json = body)
+    return request.json()

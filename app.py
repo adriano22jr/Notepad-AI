@@ -1,6 +1,7 @@
-import flask, requests, markdown, app_config, ast
+import flask, requests, markdown, app_config, ast, json
 import scripts.db_functions as db_functions
 import scripts.container_operations as container_ops
+import scripts.ai_services as ai_services
 
 app = flask.Flask(__name__, template_folder = "templateFiles", static_folder = "staticFiles")
 
@@ -147,6 +148,27 @@ def render_markdown():
      notebook_content = flask.request.form.get("notebook_content")
      markdown_content = markdown.markdown(notebook_content)
      return flask.jsonify({"content": markdown_content}), 200
+
+@app.route("/summarize-text", methods = ["POST"])
+def summarize_text():
+    text_to_summarize = flask.request.form.get("test-to-summarize")
+    summarized_text = ai_services.extract_summarization([text_to_summarize])
+    
+    text_translator_data = ai_services.detect_language(text_to_summarize)
+    text_language_detected = json.loads(json.dumps(text_translator_data, sort_keys=True, ensure_ascii=False, indent=4, separators=(',', ': ')))[0]["language"]
+    
+    if text_language_detected != "en":
+        translated_summarization = ai_services.translate_text(summarize_text, [text_language_detected])
+        return flask.jsonify({"summarization": translated_summarization})
+    else: return flask.jsonify({"summarization": summarized_text})
+
+@app.route("/translate-text", methods = ["POST"])
+def translate_text():
+    text_to_translate = flask.request.form.get("text-to-translate")
+    language_code = flask.request.form.get("language_code")
+    
+    translated_text = ai_services.translate_text(text_to_translate, [language_code])    
+    return flask.jsonify({"translation": translated_text})
 
 if __name__ == "__main__":
     app.run(port = 8080, debug=True)
