@@ -251,7 +251,7 @@
                         <div class = "w-50 mx-auto text-center provider-div mb-2" id = "submit-translation" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                             <span class = "align-middle" style = "font-size: 14px;">Translate</span>
                         </div>
-                        <div class = "text-center" id = "loader" style="display: none; margin-top: 5px;">
+                        <div class = "text-center" id = "translation-loader" style="display: none; margin-top: 5px;">
                             <div class = "lds-dual-ring"></div>
                         </div>
                     </div>
@@ -309,14 +309,14 @@
                     let textarea_content = $("#text-to-summarize").val();
 
                     $.ajax({
-                       method: "POST",
-                       url: "/summarize-text",
+                        method: "POST",
+                        url: "/summarize-text",
                         data: {"text-to-summarize": textarea_content},
                         beforeSend: function(){
                             $("#loader").show();
                         },
                         complete:function(data){
-                            $("#text-to-summarize").val(data["responseJSON"]["summarization"]);
+                            $("#text-to-summarize").val(data["summarization"]);
                             $("#loader").hide();
                         }
                     });
@@ -330,15 +330,15 @@
                     let language_code = $(".language-selector").val();
 
                     $.ajax({
-                       method: "POST",
-                       url: "/translate-text",
+                        method: "POST",
+                        url: "/translate-text",
                         data: {"text-to-translate": textarea_content, "language_code": language_code},
                         beforeSend: function(){
-                            $("#loader").show();
+                            $("#translation-loader").show();
                         },
                         complete:function(data){
-                            $("#translated-text").val(data["responseJSON"]["translation"]);
-                            $("#loader").hide();
+                            $("#translated-text").val(data["translation"]);
+                            $("#translation-loader").hide();
                         }
                     });
                 });
