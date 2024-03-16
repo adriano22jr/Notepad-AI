@@ -134,6 +134,47 @@ input[type = "text"]:focus {
     overflow: auto;
 }
 
+.ai-textarea, .ai-textarea:focus {
+    resize: none; 
+    height: 150px;
+    overflow-y: auto;
+    border: 1px solid lightgray;
+    box-shadow: none;
+}
+
+.language-selector, .language-selector:focus {
+    border: 1px solid lightgray;
+    box-shadow: none;
+}
+
+.lds-dual-ring {
+    display: inline-block;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+}
+
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    border-color: #205295 transparent #fff;
+    animation: lds-dual-ring 1.4s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
+
 @media screen and (max-width: 768px){
     .resizable-div {
         min-width: 25px;
