@@ -168,7 +168,7 @@ def translate_text():
     text_to_translate = flask.request.form.get("text-to-translate")
     language_code = flask.request.form.get("language_code")
     
-    translation_data = ai_services.translate_text(text_to_translate, [language_code])  
+    translation_data = ai_services.translate_text(str(text_to_translate), [str(language_code)])  
     translated_text = json.loads(json.dumps(translation_data, sort_keys=True, ensure_ascii=False, indent=4, separators=(',', ': ')))[0]["translations"][0]["text"]  
     return flask.jsonify({"translation": translated_text})
 
