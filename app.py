@@ -151,14 +151,15 @@ def render_markdown():
 
 @app.route("/summarize-text", methods = ["POST"])
 def summarize_text():
-    text_to_summarize = flask.request.form.get("test-to-summarize")
-    summarized_text = ai_services.extract_summarization([text_to_summarize])
+    text_to_summarize = flask.request.form.get("text-to-summarize")
+    summarized_text = ai_services.extract_summarization([str(text_to_summarize)])
     
-    text_translator_data = ai_services.detect_language(text_to_summarize)
+    text_translator_data = ai_services.detect_language(str(text_to_summarize))
     text_language_detected = json.loads(json.dumps(text_translator_data, sort_keys=True, ensure_ascii=False, indent=4, separators=(',', ': ')))[0]["language"]
     
     if text_language_detected != "en":
-        translated_summarization = ai_services.translate_text(summarized_text, [text_language_detected])
+        translation_data = ai_services.translate_text(summarized_text, [text_language_detected])  
+        translated_summarization = json.loads(json.dumps(translation_data, sort_keys=True, ensure_ascii=False, indent=4, separators=(',', ': ')))[0]["translations"][0]["text"]  
         return flask.jsonify({"summarization": translated_summarization})
     else: return flask.jsonify({"summarization": summarized_text})
 
@@ -167,7 +168,8 @@ def translate_text():
     text_to_translate = flask.request.form.get("text-to-translate")
     language_code = flask.request.form.get("language_code")
     
-    translated_text = ai_services.translate_text(text_to_translate, [language_code])    
+    translation_data = ai_services.translate_text(text_to_translate, [language_code])  
+    translated_text = json.loads(json.dumps(translation_data, sort_keys=True, ensure_ascii=False, indent=4, separators=(',', ': ')))[0]["translations"][0]["text"]  
     return flask.jsonify({"translation": translated_text})
 
 if __name__ == "__main__":
