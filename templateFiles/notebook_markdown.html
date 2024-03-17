@@ -316,7 +316,7 @@
                             $("#loader").show();
                         },
                         complete:function(data){
-                            $("#text-to-summarize").val(data["summarization"]);
+                            $("#text-to-summarize").val(data["responseJSON"]["summarization"]);
                             $("#loader").hide();
                         }
                     });
@@ -337,7 +337,7 @@
                             $("#translation-loader").show();
                         },
                         complete:function(data){
-                            $("#translated-text").val(data["translation"]);
+                            $("#translated-text").val(data["responseJSON"]["translation"]);
                             $("#translation-loader").hide();
                         }
                     });
