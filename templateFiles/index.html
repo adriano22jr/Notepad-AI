@@ -92,56 +92,38 @@
                 </div>
 
                 <div class="modal-body">
-                    <div class="container">
-                        {% if not notebooks %}
-                            <h3 class = "text-center">No notebooks found!</h3>
-                        {% else %}
-                            {% for i in range(0, lenght, 2) %}
-                                <div class="row">
+                    <div class="modal-body">
+                        <input type = "text" class = "filtering-searchbar form-control mb-2 mx-auto" style = "width: 90%;" placeholder = "Type here to filter your notebooks!">
+                        <div class="container" id = "card-container">
+                            {% if not notebooks %}
+                                <h1>No notebooks found!</h1>
+                            {% else %}
+                                <div class="row row-cols-1 row-cols-md-2">
+                                {% for i in range(0, lenght) %}
                                     <div class="col-sm">
                                         <div class="card mb-2 mx-auto" style="width: 18rem;">
                                             <img class="card-img-top" src = "{{url_for('static', filename = 'abstract-wave.jpg')}}" style = "height: 100px;">
                                             <div class="card-body text-center">
                                                 <span class="fw-bold notebook-title" style = "font-size: 18px;">{{notebooks[i]["NotebookTitle"]}}</span>
+                                                <span class = "notebook-id" style = "display: none">{{notebooks[i]["NotebookID"]}}</span>
                                                 <form action = "/open-notebook" method = "POST">
-                                                    <input type = "hidden" class = "notebook-id" name = "notebook-id" value = "{{notebooks[i]['NotebookID']}}">
                                                     <div class = "row">
                                                         <div class = "col-lg-2 w-75 mx-auto text-center provider-div open-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                                                             <span class = "align-middle" style = "font-size: 14px;">Open Notebook</span>
                                                         </div>
                                                         <div class = "col-sm-2 text-center provider-div delete-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
-                                                            <span class = "align-middle" style = "font-size: 14px;" ><i class="fa-solid fa-trash"></i></span>
+                                                            <span class = "align-middle" style = "font-size: 14px;"><i class="fa-solid fa-trash"></i></span>
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
-                                    {% if i+1 != lenght %}
-                                        <div class="col-sm">
-                                            <div class="card mb-2 mx-auto" style="width: 18rem;">
-                                                <img class="card-img-top" src = "{{url_for('static', filename = 'abstract-wave.jpg')}}" style = "height: 100px;">
-                                                <div class="card-body text-center">
-                                                    <span class="fw-bold notebook-title" style = "font-size: 18px;">{{notebooks[i+1]["NotebookTitle"]}}</span>
-                                                    <form action = "/open-notebook" method = "POST">
-                                                        <input type = "hidden" class = "notebook-id" name = "notebook-id" value = "{{notebooks[i+1]['NotebookID']}}">
-                                                        <div class = "row">
-                                                            <div class = "col-lg-2 w-75 mx-auto text-center provider-div open-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
-                                                                <span class = "align-middle" style = "font-size: 14px;">Open Notebook</span>
-                                                            </div>
-                                                            <div class = "col-sm-2 text-center provider-div delete-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
-                                                                <span class = "align-middle" style = "font-size: 14px;"><i class="fa-solid fa-trash"></i></span>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
+                                {% endfor%}
                                 </div>
-                            {% endfor%}
-                        {% endif %}
-                     </div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -250,6 +232,20 @@
         $(document).ready(function(){
             $(".open-notebook").click(function(){
                 $(this).parent().parent().submit();
+            });
+        });
+
+        //filter notebooks in open-notebook-modal
+        $(document).ready(function(){
+            $(".filtering-searchbar").on("input", function(){
+                let filter_string = $(".filtering-searchbar").val();
+                let cards = $('#card-container').find('div.card');
+
+                cards.each(function(){
+                    let title = $(this).find("span.notebook-title").text();
+                    if(!title.startsWith(filter_string)) $(this).parent().hide();
+                    else $(this).parent().show(); 
+                });
             });
         });
     </script>

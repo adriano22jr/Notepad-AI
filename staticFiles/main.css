@@ -166,6 +166,10 @@ input[type = "text"]:focus {
     animation: lds-dual-ring 1.4s linear infinite;
 }
 
+.filtering-searchbar {
+    width: 90%;
+}
+
 @keyframes lds-dual-ring {
     0% {
       transform: rotate(0deg);
@@ -178,5 +182,11 @@ input[type = "text"]:focus {
 @media screen and (max-width: 768px){
     .resizable-div {
         min-width: 25px;
+    }
+}
+
+@media screen and (max-width: 992px) and (min-width: 768px) {
+    #openNotebookModal .modal-dialog {
+        min-width: 90%;
     }
 }
