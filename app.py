@@ -20,6 +20,10 @@ def index():
         else: return flask.render_template("index.html")
     except:
         return flask.render_template("index.html")
+    
+@app.route("/services", methods = ["GET", "POST"])
+def services():
+    return flask.render_template("services.html")
 
 @app.route("/logout")
 def logout():

@@ -170,6 +170,30 @@ input[type = "text"]:focus {
     width: 90%;
 }
 
+#services-container {
+    background-color: #0A2647;
+    height: calc(100vh - 45px);
+}
+
+#main-card {
+    background-color: #fff;
+    border-radius: 5px;
+    width: 90%;
+    height: 95%;
+}
+
+#services-h1 {
+    font-size: 30px; 
+    font-weight: 1000;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.feature-card {
+    width: 80%;
+}
+
 @keyframes lds-dual-ring {
     0% {
       transform: rotate(0deg);
