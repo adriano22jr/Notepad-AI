@@ -16,7 +16,7 @@ def index():
         if flask.session["logged"] == True:
             session_user = flask.session["session-user"]
             notebooks = db_functions.find_user_notebooks(session_user["UserID"])
-            return flask.render_template("index.html", notebooks = notebooks, lenght = len(notebooks), test = app_config.TEST_VAULT)
+            return flask.render_template("index.html", notebooks = notebooks, lenght = len(notebooks))
         else: return flask.render_template("index.html")
     except:
         return flask.render_template("index.html")
