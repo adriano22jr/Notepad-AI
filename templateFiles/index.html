@@ -107,6 +107,7 @@
                                                 <span class="fw-bold notebook-title" style = "font-size: 18px;">{{notebooks[i]["NotebookTitle"]}}</span>
                                                 <span class = "notebook-id" style = "display: none">{{notebooks[i]["NotebookID"]}}</span>
                                                 <form action = "/open-notebook" method = "POST">
+                                                    <input type = "hidden" class = "notebook-id" name = "notebook-id" value = "{{notebooks[i]['NotebookID']}}">
                                                     <div class = "row">
                                                         <div class = "col-lg-2 w-75 mx-auto text-center provider-div open-notebook" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
                                                             <span class = "align-middle" style = "font-size: 14px;">Open Notebook</span>
