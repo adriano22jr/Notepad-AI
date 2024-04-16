@@ -181,7 +181,7 @@ def get_speech():
     language_code = flask.request.form.get("language_code")
     
     recognized = ai_services.recognize_speech(language_code)
-    return flask.jsonify({"recognized_speech": "testo a caso"})
+    return flask.jsonify({"recognized_speech": recognized})
 
 if __name__ == "__main__":
     app.run(port = 8080, debug = True)
