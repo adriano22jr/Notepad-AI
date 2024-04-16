@@ -176,5 +176,13 @@ def translate_text():
     translated_text = translation_data[0]["translations"][0]["text"]
     return flask.jsonify({"translation": translated_text})
 
+@app.route("/get-speech", methods = ["POST"])
+def get_speech():
+    language_code = flask.request.form.get("language_code")
+    print(language_code)
+    
+    recognized = ai_services.recognize_speech(language_code)
+    return flask.jsonify({"recognized_speech": recognized})
+
 if __name__ == "__main__":
     app.run(port = 8080, debug = True)
