@@ -49,7 +49,7 @@ def recognize_speech(language):
     speech_config.speech_recognition_language = language
     
     audio_config = speechsdk.audio.AudioConfig(use_default_microphone = True)
-    speech_recognizer = speechsdk.SpeechRecognizer(speech_config = speech_config, audio_config = audio_config)
+    speech_recognizer = speechsdk.SpeechRecognizer(speech_config = speech_config, audio_config = audio_config, language = language)
     
     speech_recognition_result = speech_recognizer.recognize_once_async().get()
     if speech_recognition_result.reason == speechsdk.ResultReason.RecognizedSpeech:
