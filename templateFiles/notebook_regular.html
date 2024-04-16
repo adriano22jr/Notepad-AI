@@ -493,14 +493,13 @@
                 $("#start-recording").css({"display": "none"});
                 $("#recording").css({"display": "block"});
                 let language = $("#speech-language").val(); 
-
-                console.log(language);
+                
                 $.ajax({
                     method: "POST",
                     url: "/get-speech",
                     data: {"language_code": language},
                     complete: function(data){
-                        console.log(data["responseJSON"]);
+                        console.log(data["responseJSON"]["recognized_speech"]);
                         $("#speech-text").val(data["responseJSON"]["recognized_speech"]);
                         $("#start-recording").css({"display": "block"});
                         $("#recording").css({"display": "none"});
