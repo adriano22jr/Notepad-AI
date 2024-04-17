@@ -185,5 +185,13 @@ def get_speech():
     recognized = ai_services.recognize_speech(language_code)
     return flask.jsonify({"recognized_speech": recognized})
 
+@app.route("/generate-text", methods = ["POST"])
+def generate_text():
+    input_text = flask.request.form.get("input_text")
+    print(input_text)
+    
+    generation = ai_services.generate_text(str(input_text))
+    return flask.jsonify({"generation": generation})
+
 if __name__ == "__main__":
     app.run(port = 8080, debug = True)

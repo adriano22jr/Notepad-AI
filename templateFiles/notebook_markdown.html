@@ -41,6 +41,9 @@
                         </ul>
                     </li>
                 </ul>
+                <ul class="navbar-nav mr-auto">
+                    <a href="#" class="nav-link modal-opener" data-bs-toggle = "modal" data-bs-target = "#text-generation-modal">Ask for help</a>
+                </ul>
             </div>
         </div>
     </nav>
@@ -259,6 +262,29 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="text-generation-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style = "background-color: #0A2647;">
+                    <h5 class="modal-title" id="createNotebookModalLabel" style = "font-size: 24px; color: white; opacity: 75%;">Text Generation</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input id = "input-generation" type = "text" class = "form-control mb-2 mx-auto" placeholder = "Type here to your question!">
+                    <textarea class = "form-control mb-2 ai-textarea" id = "generated-text" placeholder = "Wait for a response..." readonly></textarea>
+                    <div class = "text-center">
+                        <div class = "w-50 mx-auto text-center provider-div" id = "submit-generation" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">
+                            <span class = "align-middle" style = "font-size: 14px;">Ask to GPT</span>
+                        </div>
+                        <div class = "text-center" id = "generation-loader" style="display: none; margin-top: 5px;">
+                            <div class = "lds-dual-ring"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block script %}
         <script>
@@ -339,6 +365,27 @@
                         complete:function(data){
                             $("#translated-text").val(data["responseJSON"]["translation"]);
                             $("#translation-loader").hide();
+                        }
+                    });
+                });
+            });
+
+            //ajax call for text generation
+            $(document).ready(function(){
+                $("#submit-generation").click(function(){
+                    let input_text = $("#input-generation").val();
+
+                    $.ajax({
+                    method: "POST",
+                    url: "/generate-text",
+                        data: {"input_text": input_text},
+                        beforeSend: function(){
+                            $("#generation-loader").show();
+                        },
+                        complete: function(data){
+                            console.log(data);
+                            $("#generated-text").val(data["responseJSON"]["generation"]);
+                            $("#generation-loader").hide();
                         }
                     });
                 });
