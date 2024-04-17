@@ -194,14 +194,22 @@ def generate_text():
 
 @app.route("/download-content", methods = ["POST", "GET"])
 def download_content():
-    notebook_name = flask.request.form["notebook-name"]
-    content = container_ops.get_blob_content(notebook_name)
+    notebook_title = flask.request.form["notebook-title"]
+    notebook = db_functions.get_notebook_by_title(notebook_title)
+    
+    if notebook["NotebookType"] == "regular": 
+        stored_content = ast.literal_eval(container_ops.get_blob_content(notebook["StoredNotebookName"]))
+        content = ""
+        for elem in stored_content:
+            content += "<div>" + elem + "</div>" 
+    else: 
+        content = container_ops.get_blob_content(notebook["StoredNotebookName"])
     markdown_content = markdown.markdown(content)
     
     response_string = pdfkit.from_string(markdown_content, False)
     response = flask.make_response(response_string)
     response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = "inline;filename=" + notebook_name + ".pdf"
+    response.headers["Content-Disposition"] = "inline;filename=" + notebook_title + ".pdf"
     return response
 
 if __name__ == "__main__":

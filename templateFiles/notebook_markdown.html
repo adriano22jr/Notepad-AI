@@ -63,7 +63,7 @@
             <button id = "preview-markdown-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Preview</button>
             <form class = "d-inline" action = "/download-content" method = "POST">
                 <button id = "download-content-button" class = "content-button mt-2" style = "width: 150px;" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Export to PDF</button>
-                <input type = "hidden" name = "notebook-name"  value = "{{ notebook_name }}">
+                <input type = "hidden" name = "notebook-title"  value = "{{ notebook_title }}">
             </form>
         </div>
     </div>
