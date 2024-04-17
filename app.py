@@ -1,4 +1,4 @@
-import flask, requests, markdown, app_config, ast, os
+import flask, requests, markdown, app_config, ast, pdfkit, os
 import scripts.db_functions as db_functions
 import scripts.container_operations as container_ops
 import scripts.ai_services as ai_services
@@ -188,10 +188,21 @@ def get_speech():
 @app.route("/generate-text", methods = ["POST"])
 def generate_text():
     input_text = flask.request.form.get("input_text")
-    print(input_text)
     
     generation = ai_services.generate_text(str(input_text))
     return flask.jsonify({"generation": generation})
+
+@app.route("/download-content", methods = ["POST", "GET"])
+def download_content():
+    notebook_name = flask.request.form["notebook-name"]
+    content = container_ops.get_blob_content(notebook_name)
+    markdown_content = markdown.markdown(content)
+    
+    response_string = pdfkit.from_string(markdown_content, False)
+    response = flask.make_response(response_string)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "inline;filename=" + notebook_name + ".pdf"
+    return response
 
 if __name__ == "__main__":
     app.run(port = 8080, debug = True)

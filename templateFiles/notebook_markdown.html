@@ -61,6 +61,10 @@
             <button id = "edit-markdown-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Edit note</button>
             <button id = "confirm-markdown-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';" style = "display: none;">Save</button>
             <button id = "preview-markdown-content-button" class = "content-button mt-2" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Preview</button>
+            <form class = "d-inline" action = "/download-content" method = "POST">
+                <button id = "download-content-button" class = "content-button mt-2" style = "width: 150px;" onmouseover = "this.style.background = 'lightgray';" onmouseout = "this.style.background = 'white';">Export to PDF</button>
+                <input type = "hidden" name = "notebook-name"  value = "{{ notebook_name }}">
+            </form>
         </div>
     </div>
 
@@ -388,6 +392,13 @@
                             $("#generation-loader").hide();
                         }
                     });
+                });
+            });
+
+            //form trigger for pdf export
+            $(document).ready(function(){
+                $("#download-content-button").click(function(){
+                    $(this).submit();
                 });
             });
 

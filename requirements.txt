@@ -6,3 +6,4 @@ markdown==3.5.2
 azure-ai-textanalytics==5.3.0
 azure-cognitiveservices-speech==1.36.0
 openai==1.20.0
+pdfkit==1.0.0
