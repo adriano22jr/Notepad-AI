@@ -1,6 +1,7 @@
 import azure.ai.textanalytics as text_analytics
 import azure.core.credentials as core_credentials
 import azure.cognitiveservices.speech as speechsdk
+import openai
 import requests, uuid, app_config
 
 language_key = app_config.LANGUAGE_KEY
@@ -12,6 +13,10 @@ translator_location = app_config.TRANSLATOR_LOCATION
 
 speech_key = app_config.SPEECH_KEY
 speech_location = app_config.SPEECH_LOCATION
+
+openai_key = app_config.OPENAI_KEY
+openai_endpoint = app_config.OPENAI_ENDPOINT
+openai_deployment_name = app_config.OPEAI_DEPLOYMENT_NAME
 
 def extract_summarization(text):
     text_analytics_client = text_analytics.TextAnalyticsClient(language_endpoint, core_credentials.AzureKeyCredential(language_key))
@@ -47,11 +52,15 @@ def detect_language(text):
 def recognize_speech(language):
     speech_config = speechsdk.SpeechConfig(subscription = speech_key, region = speech_location)
     speech_config.speech_recognition_language = language
-    
-    audio_config = speechsdk.audio.AudioConfig(use_default_microphone = True)
-    speech_recognizer = speechsdk.SpeechRecognizer(speech_config = speech_config, audio_config = audio_config, language = language)
+    speech_recognizer = speechsdk.SpeechRecognizer(speech_config = speech_config)
     
     speech_recognition_result = speech_recognizer.recognize_once_async().get()
     if speech_recognition_result.reason == speechsdk.ResultReason.RecognizedSpeech:
         return speech_recognition_result.text
     else: return None
+    
+def generate_text(input_phrase):
+    openai_client = openai.AzureOpenAI(azure_endpoint = openai_endpoint, api_key = openai_key, api_version = "2024-02-01")
+    
+    response = openai_client.completions.create(model = openai_deployment_name, prompt = input_phrase, max_tokens = 250)
+    return response.choices[0].text
