@@ -4,7 +4,6 @@ import scripts.container_operations as container_ops
 import scripts.ai_services as ai_services
 
 app = flask.Flask(__name__, template_folder = "templateFiles", static_folder = "staticFiles")
-os.system("apt-get install -y libasound2-dev")
 os.system("apt-get install -y wkhtmltopdf")
 
 app.secret_key = app_config.APP_SECRET_KEY
